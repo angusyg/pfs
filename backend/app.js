@@ -32,7 +32,7 @@ const apiRouter = require('./routes/api');
 
 const app = express();
 
-app.set('port', appConfig.port);
+app.set('port', appConfig.app.port);
 
 // Connection to db
 connect();
