@@ -1,0 +1,21 @@
+version: "3"
+services:
+  nean-stack-app:
+    image: nean-stack
+    build:
+      context: .
+      args:
+        - APP_NAME=${APP_NAME}
+        - APP_REPOSITORY=${APP_REPOSITORY}
+    ports:
+      - "${EXTERNAL_PORT}:3000"
+    volumes:
+      - nean-stack-data:${DB_FOLDER}
+      - nean-stack-log:${LOG_FOLDER}
+      - nean-stack-web:${WEB_FOLDER}
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - TOKEN_SECRET=${TOKEN_SECRET}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - DB_FOLDER={DB_FOLDER}
+      - LOG_FOLDER=${LOG_FOLDER}
