@@ -77,7 +77,7 @@ class User extends Document {
    * @private
    */
   preSave() {
-    this.password = bcrypt.hashSync(this.password, config.saltFactor);
+    this.password = bcrypt.hashSync(this.password, config.app.saltFactor);
   }
 }
 
