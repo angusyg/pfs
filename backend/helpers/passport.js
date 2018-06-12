@@ -8,23 +8,29 @@
  */
 
 const passport = require('passport');
-const { Strategy, ExtractJWT } = require('passport-jwt');
+const { Strategy, ExtractJwt } = require('passport-jwt');
 const config = require('../config/api');
 const User = require('../models/users');
 
 /**
- * Defines passport JWT authentication strategy
- * @method errorNoRouteMapped
+ * JWT strategy authentication
  * @private
- * @param  {external:Strategy}  strategy - JWT strategy authentication
  */
-passport.use(new Strategy({
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+const jwtStrategy = new Strategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: config.tokenSecretKey,
-  }, (jwtPayload, cb) => User.findOneById(jwtPayload._id)
+  }, (jwtPayload, cb) => User.findOne({ login: jwtPayload.login })
   .then((user) => {
     if (!user) return cb(null, false);
     return cb(null, user);
   })
   .catch(err => cb(err))
-));
+);
+
+// Registers strategy
+passport.use(jwtStrategy);
+
+module.exports = {
+  initialize: () => passport.initialize(),
+  authenticate: () => passport.authenticate('jwt', { session: false }),
+};

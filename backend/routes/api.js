@@ -2,7 +2,6 @@
  * @fileoverview App API router
  * @module routes/api
  * @requires {@link external:express}
- * @requires config/api
  * @requires helpers/security
  * @requires config/api
  * @requires controllers/api
@@ -17,7 +16,7 @@ const router = express.Router();
 
 /**
  * @path {POST} /log/:level
- * @params {string} :level  - level of the log to save
+ * @params {string} :level      - level of the log to save
  * @body {json} log
  * @body {string} log.url       - current page url of log
  * @body {string} log.message   - message to log
@@ -45,9 +44,10 @@ router.post(loginPath, apiController.login);
  * @path {GET} /logout
  * @header {string} authorization - Header supporting JWT Token
  * @code {204} if successful, no content
+ * @code {401} if login is not valid
  * @name logout
  */
-router.get(logoutPath, security.requiresLogin, apiController.logout);
+router.get(logoutPath, security.requiresLogin(), apiController.logout);
 
 /**
  * @path {GET} /refresh
@@ -59,6 +59,6 @@ router.get(logoutPath, security.requiresLogin, apiController.logout);
  * @code {500} if an unexpected error occurred
  * @name refresh
  */
-router.get(refreshPath, security.requiresLogin, apiController.refreshToken);
+router.get(refreshPath, apiController.refreshToken);
 
 module.exports = router;

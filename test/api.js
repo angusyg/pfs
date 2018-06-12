@@ -38,7 +38,7 @@ describe('API integration tests', () => {
   before((done) => {
     initEnv();
     app = require('../backend/app');
-    const www = require('../backend/bin/www');
+    require('../backend/bin/www');
     config = require('../backend/config/api')
     app.on("appStarted", () => {
       initDb(done);
@@ -208,6 +208,40 @@ describe('API integration tests', () => {
           });
       });
     });
+    describe('ERROR', () => {
+      it('should return an missing access token error', done => {
+        request(app)
+          .get('/api/refresh')
+          .set(config.refreshTokenHeader, refreshToken)
+          .end((err, res) => {
+            expect(res.statusCode).to.equal(401);
+            expect(res).to.be.json;
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.own.property('code', 'MISSING_TOKEN');
+            expect(res.body).to.have.own.property('message', 'Access/refresh token missing');
+            expect(res.body).to.have.own.property('reqId');
+            expect(res.body.reqId).to.match(uuid);
+            done();
+          });
+      });
+    });
+    describe('ERROR', () => {
+      it('should return an missing refresh token error', done => {
+        request(app)
+          .get('/api/refresh')
+          .set(config.accessTokenHeader, `bearer ${accessToken}`)
+          .end((err, res) => {
+            expect(res.statusCode).to.equal(401);
+            expect(res).to.be.json;
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.own.property('code', 'MISSING_TOKEN');
+            expect(res.body).to.have.own.property('message', 'Access/refresh token missing');
+            expect(res.body).to.have.own.property('reqId');
+            expect(res.body.reqId).to.match(uuid);
+            done();
+          });
+      });
+    });
   });
 
   describe('ENDPOINT : GET /logout', () => {
@@ -231,12 +265,6 @@ describe('API integration tests', () => {
           .get('/api/logout')
           .end((err, res) => {
             expect(res.statusCode).to.equal(401);
-            expect(res).to.be.json;
-            expect(res.body).to.be.an('object');
-            expect(res.body).to.have.own.property('code', 'Unauthorized');
-            expect(res.body).to.have.own.property('message', 'Not authorized to access to this resource');
-            expect(res.body).to.have.own.property('reqId');
-            expect(res.body.reqId).to.match(uuid);
             done();
           });
       });
