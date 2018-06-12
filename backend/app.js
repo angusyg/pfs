@@ -9,6 +9,7 @@
  * @requires {@link external:uuid/v4}
  * @requires {@link external:helmet}
  * @requires {@link external:cors}
+ * @requires helpers/passport
  * @requires config/app
  * @requires config/db
  * @requires helpers/errorhandler
