@@ -9,6 +9,7 @@
  * @requires {@link external:uuid/v4}
  * @requires {@link external:helmet}
  * @requires {@link external:cors}
+ * @requires helpers/passport
  * @requires config/app
  * @requires config/db
  * @requires helpers/errorhandler
@@ -24,6 +25,7 @@ const pino = require('express-pino-logger');
 const uuidv4 = require('uuid/v4');
 const helmet = require('helmet');
 const cors = require('cors');
+const passport = require('./helpers/passport');
 const appConfig = require('./config/app');
 const { connect } = require('./config/db');
 const errorHandler = require('./helpers/errorhandler');
@@ -50,6 +52,9 @@ app.use(cors(appConfig.crossOrigin));
 // Body parser (to json) middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Security initialization
+app.use(passport.initialize());
 
 // Static files
 if (process.env.NODE_ENV === 'production') {

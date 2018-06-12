@@ -1,6 +1,6 @@
 {
   "name": "nean-stack",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "NeDB Express Angularjs Nodejs application stack",
   "main": "./backend/bin/www",
   "scripts": {
@@ -52,6 +52,8 @@
     "jquery": "^3.3.1",
     "jsonwebtoken": "^8.2.0",
     "kind-of": "^6.0.2",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
     "pino": "^4.14.0",
     "pino-debug": "^1.1.1",
     "pino-multi-stream": "^3.1.2",

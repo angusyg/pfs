@@ -1,11 +1,12 @@
 /**
  * @fileoverview Application API controller
  * @module controllers/api
- * @requires {@link external:express}
+ * @requires config/api
  * @requires helpers/logger
  * @requires services/users
  */
 
+const { accessTokenHeader, refreshTokenHeader } = require('../config/api');
 const { logger } = require('../helpers/logger')();
 const userService = require('../services/users');
 
@@ -50,7 +51,7 @@ controller.logout = (req, res) => res.status(204).end();
  * @param  {external:Response} res - Response to send
  */
 controller.refreshToken = (req, res, next) => {
-  userService.refreshToken(req.user, req.refresh)
+  userService.refreshToken(req.headers[accessTokenHeader], req.headers[refreshTokenHeader])
     .then(token => res.status(200).json(token))
     .catch(err => next(err));
 };

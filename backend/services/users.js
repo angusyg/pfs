@@ -80,19 +80,22 @@ service.login = infos => new Promise((resolve, reject) => {
 /**
  * Refreshes user access token after validating refresh token
  * @method refreshToken
- * @param   {Object} infos         - user infos (extracted from expired JWT token)
+ * @param   {string} accessToken   - JWT token
  * @param   {string} refreshToken  - user refresh token
  * @returns {Promise<Object>} new access token
  */
-service.refreshToken = (infos, refreshToken) => new Promise((resolve, reject) => {
-  User.findOne({ login: infos.login })
-    .then((user) => {
-      if (user) {
-        if (refreshToken === user.refreshToken) resolve({ accessToken: generateAccessToken(user) });
-        else reject(new UnauthorizedAccessError('REFRESH_NOT_ALLOWED', 'Refresh token has been revoked'));
-      } else reject(new ApiError('USER_NOT_FOUND', 'No user found for login in JWT Token'));
-    })
-    .catch(err => reject(err));
+service.refreshToken = (accessToken, refreshToken) => new Promise((resolve, reject) => {
+  if (accessToken && refreshToken) {
+    const payload = jwt.decode(accessToken.split(' ')[1]);
+    User.findOne({ login: payload.login })
+      .then((user) => {
+        if (user) {
+          if (refreshToken === user.refreshToken) resolve({ accessToken: generateAccessToken(user) });
+          else reject(new UnauthorizedAccessError('REFRESH_NOT_ALLOWED', 'Refresh token has been revoked'));
+        } else reject(new ApiError('USER_NOT_FOUND', 'No user found for login in JWT Token'));
+      })
+      .catch(err => reject(err));
+  } else reject(new UnauthorizedAccessError('MISSING_TOKEN', 'Access/refresh token missing'));
 });
 
 module.exports = service;
