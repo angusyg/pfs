@@ -38,6 +38,7 @@ describe('API integration tests', () => {
   before((done) => {
     initEnv();
     app = require('../backend/app');
+    const www = require('../backend/bin/www');
     config = require('../backend/config/api')
     app.on("appStarted", () => {
       initDb(done);
@@ -53,7 +54,7 @@ describe('API integration tests', () => {
             expect(res.statusCode).to.equal(404);
             expect(res).to.be.json;
             expect(res.body).to.be.an('object');
-            expect(res.body).to.have.own.property('code', 'NOT_FOUND');
+            expect(res.body).to.have.own.property('code', 'Not Found');
             expect(res.body).to.have.own.property('message', 'No endpoint mapped for requested url');
             expect(res.body).to.have.own.property('reqId');
             expect(res.body.reqId).to.match(uuid);
@@ -137,7 +138,7 @@ describe('API integration tests', () => {
       it('should return an access token', done => {
         request(app)
           .get('/api/refresh')
-          .set(config.accessTokenHeader, `Bearer ${accessToken}`)
+          .set(config.accessTokenHeader, `bearer ${accessToken}`)
           .set(config.refreshTokenHeader, refreshToken)
           .end(async (err, res) => {
             expect(res.statusCode).to.equal(200);
@@ -167,7 +168,7 @@ describe('API integration tests', () => {
       it('should return an user not found error', done => {
         request(app)
           .get('/api/refresh')
-          .set(config.accessTokenHeader, `Bearer ${accessTokenBadLogin}`)
+          .set(config.accessTokenHeader, `bearer ${accessTokenBadLogin}`)
           .set(config.refreshTokenHeader, refreshToken)
           .end((err, res) => {
             expect(res.statusCode).to.equal(500);
@@ -193,7 +194,7 @@ describe('API integration tests', () => {
       it('should return an unauthorized error', done => {
         request(app)
           .get('/api/refresh')
-          .set(config.accessTokenHeader, `Bearer ${accessToken}`)
+          .set(config.accessTokenHeader, `bearer ${accessToken}`)
           .set(config.refreshTokenHeader, refreshToken)
           .end((err, res) => {
             expect(res.statusCode).to.equal(401);
@@ -214,7 +215,7 @@ describe('API integration tests', () => {
       it('should return no content', done => {
         request(app)
           .get('/api/logout')
-          .set(config.accessTokenHeader, `Bearer ${accessToken}`)
+          .set(config.accessTokenHeader, `bearer ${accessToken}`)
           .set(config.refreshTokenHeader, refreshToken)
           .end((err, res) => {
             expect(res.statusCode).to.equal(204);
@@ -232,8 +233,8 @@ describe('API integration tests', () => {
             expect(res.statusCode).to.equal(401);
             expect(res).to.be.json;
             expect(res.body).to.be.an('object');
-            expect(res.body).to.have.own.property('code', 'NOT_AUTHORIZED_ACCESS');
-            expect(res.body).to.have.own.property('message', 'Not authorized to access to this endpoint');
+            expect(res.body).to.have.own.property('code', 'Unauthorized');
+            expect(res.body).to.have.own.property('message', 'Not authorized to access to this resource');
             expect(res.body).to.have.own.property('reqId');
             expect(res.body.reqId).to.match(uuid);
             done();

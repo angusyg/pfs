@@ -27,7 +27,7 @@ const security = {};
  * @param  {nextMiddleware}     next - Callback to pass control to next middleware
  */
 security.requiresLogin = async (req, res, next) => {
-  if (req.headers && req.headers[accessTokenHeader] && req.headers[accessTokenHeader].split(' ')[0] === 'Bearer') {
+  if (req.headers && req.headers[accessTokenHeader] && req.headers[accessTokenHeader].split(' ')[0] === 'bearer') {
     try {
       const decode = await jwtVerify(req.headers[accessTokenHeader].split(' ')[1], tokenSecretKey);
       req.user = decode;
