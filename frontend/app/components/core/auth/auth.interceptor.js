@@ -23,7 +23,7 @@
       let authService = $injector.get('authService');
       if (authService.isLoggedIn()) {
         let SECURITY = $injector.get('SECURITY');
-        config.headers[SECURITY.ACCESS_TOKEN_HEADER] = `Bearer ${authService.getToken()}`;
+        config.headers[SECURITY.ACCESS_TOKEN_HEADER] = `bearer ${authService.getToken()}`;
         config.headers[SECURITY.REFRESH_TOKEN_HEADER] = authService.getRefreshToken();
       }
       return config;
@@ -42,7 +42,7 @@
           .catch(err => $q.reject(err))
           .then(() => {
             let SECURITY = $injector.get('SECURITY');
-            err.config.headers[SECURITY.ACCESS_TOKEN_HEADER] = `Bearer ${authService.getToken()}`;
+            err.config.headers[SECURITY.ACCESS_TOKEN_HEADER] = `bearer ${authService.getToken()}`;
             return $injector.get('$http')(err.config)
               .catch(err => $q.reject(err))
               .then(response => $q.resolve(response));
