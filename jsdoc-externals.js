@@ -138,3 +138,15 @@
  * @external cors
  * @see https://github.com/expressjs/cors
  */
+
+/**
+ * Simple, unobtrusive authentication for Node.js
+ * @external passport
+ * @see http://www.passportjs.org/
+ */
+
+/**
+ * A Passport strategy for authenticating with a JSON Web Token.
+ * @external passport-jwt
+ * @see https://github.com/themikenicholson/passport-jwt
+ */
