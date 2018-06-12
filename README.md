@@ -11,6 +11,7 @@ A Nodejs Express server to expose REST API. Persistance is done using NeDB embed
 Features
 
   * Authentication: user database to store login/password
+  * Security: Passport JWT strategy
   * REST API:
     * login endpoint: to log in users
     * logout endpoint: to log out users
