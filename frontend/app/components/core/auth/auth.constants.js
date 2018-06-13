@@ -3,19 +3,11 @@
 
   angular
     .module('frontend.core.auth')
-    .constant('HTTP_STATUS_CODE', {
-      OK: 200,
-      ACCEPTED: 202,
-      NO_CONTENT: 204,
-      UNAUTHORIZED: 401,
-      FORBIDDEN: 403,
-      TOKEN_EXPIRED: 419,
-      SERVER_ERROR: 500,
-    })
     .constant('SECURITY', {
       ACTIVATED: true,
       ACCESS_TOKEN: 'JWTToken',
       REFRESH_TOKEN: 'RefreshToken',
+      ACCESS_TOKEN_TIMESTAMP: 'JWTTokenTimestamp',
       ACCESS_TOKEN_HEADER: 'authorization',
       REFRESH_TOKEN_HEADER: 'refresh',
     })

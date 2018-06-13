@@ -10,13 +10,14 @@
     .factory('authService', AuthService)
     .run(['authService', (authService) => authService.stateSecurization()]);
 
-  AuthService.$inject = ['$http', 'store', '$q', '$rootScope', '$transitions', 'helper', 'SECURITY', 'AUTH_EVENTS', 'API'];
+  AuthService.$inject = ['$http', 'store', '$q', '$rootScope', '$transitions', '$timeout', 'helper', 'SECURITY', 'AUTH_EVENTS', 'API'];
 
-  function AuthService($http, store, $q, $rootScope, $transitions, helper, SECURITY, AUTH_EVENTS, API) {
+  function AuthService($http, store, $q, $rootScope, $transitions, $timeout, helper, SECURITY, AUTH_EVENTS, API) {
     const LOGIN_ENDPOINT = `${API.URL}${API.BASE}/login`;
     const LOGOUT_ENDPOINT = `${API.URL}${API.BASE}/logout`;
     const REFRESH_ENDPOINT = `${API.URL}${API.BASE}/refresh`;
     let refreshRequestLoading = false;
+    let refreshTimerRunning = false;
 
     return {
       getToken: getToken,
@@ -53,18 +54,21 @@
       return $http.post(LOGIN_ENDPOINT, user)
         .then((response) => {
           store.set(SECURITY.ACCESS_TOKEN, response.data.accessToken);
+          store.set(SECURITY.ACCESS_TOKEN_TIMESTAMP, new Date.now());
           store.set(SECURITY.REFRESH_TOKEN, response.data.refreshToken);
+          putRefreshTimer();
           return $q.resolve();
-        });
+        })
+        .catch(err => $q.reject(err));
     }
 
     function logout() {
       return $http.get(LOGOUT_ENDPOINT)
         .then(() => {
-          store.remove(SECURITY.ACCESS_TOKEN);
-          store.remove(SECURITY.REFRESH_TOKEN);
+          cleanStore();
           return $q.resolve();
-        });
+        })
+        .catch(err => $q.reject(err));
     }
 
     function refreshToken() {
@@ -75,6 +79,7 @@
             store.set(SECURITY.ACCESS_TOKEN, response.data.accessToken);
             return $q.resolve(response.data.accessToken);
           })
+          .catch(err => $q.reject(err))
           .finally(() => refreshRequestLoading = false);
       } else $q.reject(new Error('Concurrent refresh token request'));
     }
@@ -97,5 +102,35 @@
         });
       }
     }
+
+    function cleanStore() {
+      store.remove(SECURITY.ACCESS_TOKEN);
+      store.remove(SECURITY.REFRESH_TOKEN);
+      store.remove(SECURITY.ACCESS_TOKEN_TIMESTAMP);
+    }
+
+    function putRefreshTimer() {
+      let token = store.get(SECURITY.ACCESS_TOKEN);
+      let refresh = store.get(SECURITY.REFRESH_TOKEN);
+      if (token && refresh) {
+        if (!refreshTimerRunning) {
+          refreshToken()
+            .then((token) => {
+              let expirationDurationMs = helper.getTokenExpirationDuration(token) * 1000;
+              let timer = Math.floor(expirationDurationMs * 0.9);
+              $timeout(() => putRefreshTimer(), timer);
+              refreshTimerRunning = true;
+            })
+            .catch(err => {
+              cleanStore();
+              $rootScope.$broadcast(AUTH_EVENTS.NOT_AUTHENTICATED, true);
+            });
+        } else {
+
+        }
+      }
+    }
+
+    putRefreshTimer();
   }
 })();

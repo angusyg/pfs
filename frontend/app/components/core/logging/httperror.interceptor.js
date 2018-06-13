@@ -17,7 +17,7 @@
     };
 
     function responseError(err) {
-      if (err.status >= 400 && err.status <= 600) $log.error(`Received ${err.status} on request ${err.data.reqId}: ${JSON.stringify(err.config)}`);
+      if (err.status >= 400 && err.status < 600) $log.error(`Received ${err.status} on request ${err.data.reqId}: ${JSON.stringify(err.config)}`);
       return $q.reject(err);
     }
   }

@@ -34,14 +34,16 @@
           });
 
           loggedIn.result
-            .then(() => $state.go(data.$to()))
+            .then(() => {
+              if (data.$to) $state.go(data.$to());
+            })
             .finally(() => loginInProgress = false);
         }
       };
       scope.$on(AUTH_EVENTS.NOT_AUTHENTICATED, show);
     }
 
-    ModalController.$inject = ['$uibModalInstance', 'authService', '$timeout', 'PARAMETERS'];
+    ModalController.$inject = ['$uibModalInstance', 'authService', '$timeout', 'PARAMETERS', 'HTTP_STATUS_CODE'];
 
     function ModalController($uibModalInstance, authService, $timeout, PARAMETERS) {
       const vm = this;
@@ -56,7 +58,7 @@
         authService.login(vm.user)
           .then(() => $uibModalInstance.close())
           .catch((err) => {
-            if (err.status === 401) vm.error = err.data.code;
+            if (err.status === HTTP_STATUS_CODE.UNAUTHORIZED && err.data.code) vm.error = err.data.code;
             else vm.error = 0;
             $timeout(() => vm.error = null, PARAMETERS.TOOLTIP_DURATION);
           });

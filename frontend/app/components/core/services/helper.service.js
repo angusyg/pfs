@@ -17,6 +17,7 @@
       getUserInfosFromToken: getUserInfosFromToken,
       getUserLoginFromToken: getUserLoginFromToken,
       getUserRolesFromToken: getUserRolesFromToken,
+      getTokenExpirationDuration: getTokenExpirationDuration,
       isBlank: isBlank,
       isNotBlank: isNotBlank,
     };
@@ -36,6 +37,11 @@
 
     function getUserRolesFromToken(token) {
       return getUserInfosFromToken(token).roles;
+    }
+
+    function getTokenExpirationDuration(token) {
+      let payload = getUserInfosFromToken(token);
+      return payload.exp - payload.iat;
     }
 
     function isBlank(obj) {
