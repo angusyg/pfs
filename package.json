@@ -6,11 +6,10 @@
   "scripts": {
     "test": "mocha test/tests.js --timeout 10000 --exit",
     "dev": "concurrently \"npm run dev:back\" \"npm run dev:front\"",
-    "dev:back": "cross-env NODE_ENV=development cross-env DEBUG=nean:* node ./node_modules/nodemon/bin/nodemon",
-    "dev:front": "cross-env NODE_ENV=development node ./node_modules/gulp/bin/gulp",
+    "dev:back": "cross-env NODE_ENV=development cross-env DEBUG=nean:* nodemon",
+    "dev:front": "cross-env NODE_ENV=development gulp",
     "start": "node ./backend/bin/www",
-    "build": "cross-env NODE_ENV=production node ./node_modules/gulp/bin/gulp",
-    "postinstall": "npm run build"
+    "build": "cross-env NODE_ENV=production gulp"
   },
   "repository": {
     "type": "git",
@@ -20,7 +19,12 @@
     "nodejs",
     "angularjs",
     "express",
-    "nedb"
+    "nedb",
+    "passport",
+    "neDB",
+    "jsonwebtoken",
+    "bootstrap",
+    "pino"
   ],
   "author": "angusyg",
   "license": "MIT",
