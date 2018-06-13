@@ -28,8 +28,7 @@ function generateAccessToken(user) {
   return jwt.sign({
     login: user.login,
     roles: user.roles,
-    exp: Math.floor(Date.now() / 1000) + config.accessTokenExpirationTime,
-  }, config.tokenSecretKey);
+  }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
 }
 
 /**
