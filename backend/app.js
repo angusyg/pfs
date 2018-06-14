@@ -29,21 +29,21 @@ const passport = require('./helpers/passport');
 const appConfig = require('./config/app');
 const { connect } = require('./config/db');
 const errorHandler = require('./helpers/errorhandler');
-const { logger } = require('./helpers/logger')();
+const logger = require('./helpers/logger');
 const apiRouter = require('./routes/api');
 
 const app = express();
 
 app.set('port', appConfig.app.port);
 
-// Connection to db
-connect();
-
 // Logger middleware
 app.use(pino({
   logger,
   genReqId: () => uuidv4(),
 }));
+
+// Connection to db
+connect();
 
 // Security middlewares
 app.use(helmet());

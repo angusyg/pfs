@@ -13,7 +13,11 @@
     .config(ExceptionHandlerDecorator)
     .config(Config);
 
-  LogDecorator.$inject = ['$provide', 'PARAMETERS', 'API'];
+  LogDecorator.$inject = [
+    '$provide',
+    'PARAMETERS',
+    'API',
+  ];
 
   function LogDecorator($provide, PARAMETERS, API) {
     if (PARAMETERS.SERVER_LOGGING_ACTIVATED) {
@@ -46,11 +50,15 @@
   ExceptionHandlerDecorator.$inject = ['$provide'];
 
   function ExceptionHandlerDecorator($provide) {
-    ExceptionHandler.$inject = ['$delegate', '$log'];
+    ExceptionHandler.$inject = [
+      '$delegate',
+      '$log',
+    ];
 
     function ExceptionHandler($delegate, $log) {
       return (exception, cause) => $log.error(exception, cause);
     }
+
     $provide.decorator('$exceptionHandler', ExceptionHandler);
   }
 

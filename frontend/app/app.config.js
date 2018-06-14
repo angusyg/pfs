@@ -4,7 +4,9 @@
     .config(Config);
 
   // Configuration of providers
-  Config.$inject = [];
+  Config.$inject = ['$urlRouterProvider'];
 
-  function Config() {}
+  function Config($urlRouterProvider) {
+    $urlRouterProvider.otherwise('/app');
+  }
 }());

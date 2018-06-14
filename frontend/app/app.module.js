@@ -1,4 +1,7 @@
 (function() {
   angular
-    .module('frontend', ['frontend.core', 'frontend.home']);
+    .module('frontend', [
+      'frontend.core',
+      'frontend.home',
+    ]);
 }());

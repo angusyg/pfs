@@ -80,21 +80,9 @@
  */
 
 /**
- * High performance debug logging.
- * @external pino-debug
- * @see https://github.com/pinojs/pino-debug
- */
-
-/**
  * A wrapper for Pino to provide Bunyan's multiple stream API
  * @external pino-multi-stream
  * @see https://github.com/pinojs/pino-multi-stream
- */
-
-/**
- * A tiny JavaScript debugging utility modelled after Node.js core's debugging technique. Works in Node.js and web browsers.
- * @external debug
- * @see https://github.com/visionmedia/debug
  */
 
 /**

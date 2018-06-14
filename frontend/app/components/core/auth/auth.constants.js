@@ -3,15 +3,6 @@
 
   angular
     .module('frontend.core.auth')
-    .constant('HTTP_STATUS_CODE', {
-      OK: 200,
-      ACCEPTED: 202,
-      NO_CONTENT: 204,
-      UNAUTHORIZED: 401,
-      FORBIDDEN: 403,
-      TOKEN_EXPIRED: 419,
-      SERVER_ERROR: 500,
-    })
     .constant('SECURITY', {
       ACTIVATED: true,
       ACCESS_TOKEN: 'JWTToken',
@@ -31,6 +22,10 @@
       NOT_AUTHENTICATED: 'auth-not-authenticated',
       NOT_AUTHORIZED: 'auth-not-authorized',
     })
+    .constant('AUTH_EVENTS_TYPE', {
+      STATE_TRANSITION: 'STATE_TRANSITION',
+      RESOURCE: 'RESOURCE',
+    })
     .constant('TRANSLATE', {
       FR: {
         APP_LOGO: 'images/hello-world.png',
@@ -41,6 +36,8 @@
         AUTH_BTN_CONNEXION: 'Connexion',
         AUTH_PLACEHOLDER_LOGIN: 'Login',
         AUTH_PLACEHOLDER_PASSWORD: 'Mot de passe',
+        AUTH_BAD_ROLE: 'Droits insuffisants',
+        AUTH_PERM_LOGO: 'images/cancel.png',
       },
       EN: {
         APP_LOGO: 'images/hello-world.png',
@@ -51,6 +48,8 @@
         AUTH_BTN_CONNEXION: 'Connection',
         AUTH_PLACEHOLDER_LOGIN: 'Login',
         AUTH_PLACEHOLDER_PASSWORD: 'Password',
+        AUTH_BAD_ROLE: 'Bad role',
+        AUTH_PERM_LOGO: 'images/cancel.png',
       }
     });
 })();

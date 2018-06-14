@@ -8,7 +8,11 @@
     .module('frontend.home')
     .config(Config);
 
-  Config.$inject = ['$translateProvider', '$translatePartialLoaderProvider', 'TRANSLATE'];
+  Config.$inject = [
+    '$translateProvider',
+    '$translatePartialLoaderProvider',
+    'TRANSLATE',
+  ];
 
   function Config($translateProvider, $translatePartialLoaderProvider, TRANSLATE) {
     $translateProvider.translations('fr', TRANSLATE.FR);
