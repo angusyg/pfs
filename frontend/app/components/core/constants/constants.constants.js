@@ -11,9 +11,6 @@
       URL: 'http://localhost:3000',
       BASE: '/api',
     })
-    .constant('APP', {
-      HOME_STATE_NAME: 'app',
-    })
     .constant('HTTP_STATUS_CODE', {
       OK: 200,
       ACCEPTED: 202,

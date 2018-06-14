@@ -120,8 +120,8 @@ class AuthenticationExpiredError extends ApiError {
 }
 
 /**
+ * Url not found error class module to create and convert error to json response
  * @class
- * @classdesc Url not found error class module to create and convert error to json response
  * @extends {ApiError}
  */
 class NotFoundError extends ApiError {
@@ -207,4 +207,103 @@ class ForbiddenOperationError extends ApiError {
   }
 }
 
-module.exports = { ApiError, AuthenticationExpiredError, NotFoundError, UnauthorizedAccessError, ForbiddenOperationError };
+/**
+ * Creates an JwtTokenExpiredError
+ * @class
+ * @extends {ApiError}
+ */
+class JwtTokenExpiredError extends ApiError {
+  constructor(...args) {
+    if (args.length === 1) super('TOKEN_EXPIRED', args[0]);
+    else if (args.length === 2) super(args[0], args[1]);
+    else super('TOKEN_EXPIRED', 'Jwt token has expired');
+
+    /**
+     * Name of the error
+     * @default JwtTokenExpiredError
+     * @member {string}
+     */
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+
+    /**
+     * HTTP status code of the response to be send
+     * @default 401
+     * @member {number}
+     */
+    this.statusCode = 401;
+
+    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
+  }
+}
+
+/**
+ * Creates an NoJwtTokenError
+ * @class
+ * @extends {ApiError}
+ */
+class NoJwtTokenError extends ApiError {
+  constructor(...args) {
+    if (args.length === 1) super('NO_TOKEN_FOUND', args[0]);
+    else if (args.length === 2) super(args[0], args[1]);
+    else super('NO_TOKEN_FOUND', 'No Jwt token found in authorization header');
+
+    /**
+     * Name of the error
+     * @default NoJwtTokenError
+     * @member {string}
+     */
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+
+    /**
+     * HTTP status code of the response to be send
+     * @default 401
+     * @member {number}
+     */
+    this.statusCode = 401;
+
+    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
+  }
+}
+
+/**
+ * Creates an JwtTokenSignatureError
+ * @class
+ * @extends {ApiError}
+ */
+class JwtTokenSignatureError extends ApiError {
+  constructor(...args) {
+    if (args.length === 1) super('INVALID_TOKEN_SIGNATURE', args[0]);
+    else if (args.length === 2) super(args[0], args[1]);
+    else super('INVALID_TOKEN_SIGNATURE', 'Jwt token signature is invalid');
+
+    /**
+     * Name of the error
+     * @default JwtTokenSignatureError
+     * @member {string}
+     */
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+
+    /**
+     * HTTP status code of the response to be send
+     * @default 401
+     * @member {number}
+     */
+    this.statusCode = 401;
+
+    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
+  }
+}
+
+module.exports = {
+  ApiError,
+  AuthenticationExpiredError,
+  NotFoundError,
+  UnauthorizedAccessError,
+  ForbiddenOperationError,
+  JwtTokenExpiredError,
+  NoJwtTokenError,
+  JwtTokenSignatureError,
+};

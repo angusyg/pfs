@@ -7,25 +7,12 @@
 
   angular
     .module('frontend.core.init')
-    .config(Routing)
     .config(Config);
 
-  Routing.$inject = ['$stateProvider'];
-
-  function Routing($stateProvider) {
-    const initState = {
-      name: 'init',
-      url: '/',
-      controller: 'InitController'
-    };
-    $stateProvider.state(initState);
-  }
-
   // Configuration of providers
-  Config.$inject = ['$urlRouterProvider', '$locationProvider'];
+  Config.$inject = ['$locationProvider'];
 
-  function Config($urlRouterProvider, $locationProvider) {
+  function Config($locationProvider) {
     $locationProvider.html5Mode(false);
-    $urlRouterProvider.otherwise('/');
   }
 }());

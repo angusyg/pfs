@@ -51,7 +51,7 @@ controller.logout = (req, res) => res.status(204).end();
  * @param  {external:Response} res - Response to send
  */
 controller.refreshToken = (req, res, next) => {
-  userService.refreshToken(req.headers[accessTokenHeader], req.headers[refreshTokenHeader])
+  userService.refreshToken(req.user, req.headers[refreshTokenHeader])
     .then(token => res.status(200).json(token))
     .catch(err => next(err));
 };

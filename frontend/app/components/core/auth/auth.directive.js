@@ -9,9 +9,15 @@
     .module('frontend.core.auth')
     .directive('authDialog', AuthDialog);
 
-  AuthDialog.$inject = ['$state', '$uibModal', '$templateCache', 'AUTH_EVENTS'];
+  AuthDialog.$inject = [
+    '$state',
+    '$uibModal',
+    '$templateCache',
+    'AUTH_EVENTS',
+    'AUTH_EVENTS_TYPE',
+  ];
 
-  function AuthDialog($state, $uibModal, $templateCache, AUTH_EVENTS) {
+  function AuthDialog($state, $uibModal, $templateCache, AUTH_EVENTS, AUTH_EVENTS_TYPE) {
     return {
       restrict: 'E',
       link: link,
@@ -35,7 +41,7 @@
 
           loggedIn.result
             .then(() => {
-              if (data.$to) $state.go(data.$to());
+              if (data.type === AUTH_EVENTS_TYPE.STATE_TRANSITION) $state.go(data.data.$to());
             })
             .finally(() => loginInProgress = false);
         }
@@ -45,7 +51,7 @@
 
     ModalController.$inject = ['$uibModalInstance', 'authService', '$timeout', 'PARAMETERS', 'HTTP_STATUS_CODE'];
 
-    function ModalController($uibModalInstance, authService, $timeout, PARAMETERS) {
+    function ModalController($uibModalInstance, authService, $timeout, PARAMETERS, HTTP_STATUS_CODE) {
       const vm = this;
       vm.user = {
         login: '',

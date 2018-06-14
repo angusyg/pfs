@@ -9,7 +9,10 @@
     .module('frontend.core.i18n')
     .config(Config);
 
-  Config.$inject = ['$translateProvider', '$translatePartialLoaderProvider'];
+  Config.$inject = [
+    '$translateProvider',
+    '$translatePartialLoaderProvider',
+  ];
 
   function Config($translateProvider, $translatePartialLoaderProvider) {
     $translateProvider.useLoader('$translatePartialLoader', {

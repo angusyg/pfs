@@ -7,7 +7,6 @@
       ACTIVATED: true,
       ACCESS_TOKEN: 'JWTToken',
       REFRESH_TOKEN: 'RefreshToken',
-      ACCESS_TOKEN_TIMESTAMP: 'JWTTokenTimestamp',
       ACCESS_TOKEN_HEADER: 'authorization',
       REFRESH_TOKEN_HEADER: 'refresh',
     })
@@ -22,6 +21,10 @@
       TOKEN_EXPIRED: 'auth-token-expired',
       NOT_AUTHENTICATED: 'auth-not-authenticated',
       NOT_AUTHORIZED: 'auth-not-authorized',
+    })
+    .constant('AUTH_EVENTS_TYPE', {
+      STATE_TRANSITION: 'STATE_TRANSITION',
+      RESOURCE: 'RESOURCE',
     })
     .constant('TRANSLATE', {
       FR: {

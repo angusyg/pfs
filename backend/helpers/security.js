@@ -14,7 +14,7 @@ const security = {};
  * Checks if request is authenticated or not
  * @method requiresLogin
  */
-security.requiresLogin = () => passport.authenticate();
+security.requiresLogin = (req, res, next) => passport.authenticate(req, res, next);
 
 /**
  * Call middleware with user request permissions
