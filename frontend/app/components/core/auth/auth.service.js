@@ -157,6 +157,7 @@
               });
               return false;
             }
+            return true;
           }
         });
       }
