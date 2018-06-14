@@ -44,7 +44,11 @@ class User extends Document {
      * User roles
      * @member {string[]}
      */
-    this.roles = [String];
+    this.roles = {
+      type: [String],
+      required: true,
+      default: ['USER'],
+    };
 
     /**
      * User refresh token
