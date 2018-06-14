@@ -6,8 +6,8 @@
  * @requires services/users
  */
 
-const { accessTokenHeader, refreshTokenHeader } = require('../config/api');
-const { logger } = require('../helpers/logger')();
+const { refreshTokenHeader } = require('../config/api');
+const logger = require('../helpers/logger');
 const userService = require('../services/users');
 
 const controller = {};

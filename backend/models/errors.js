@@ -9,7 +9,7 @@ const kindOf = require('kind-of');
 const http = require('http');
 
 const ns = 'models:errors';
-const { logger, debug } = require('../helpers/logger')(ns);
+const logger = require('../helpers/logger');
 
 /**
  * Creates a new ApiError
@@ -114,8 +114,6 @@ class AuthenticationExpiredError extends ApiError {
      * @member {number}
      */
     this.statusCode = 419;
-
-    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
   }
 }
 
@@ -142,8 +140,6 @@ class NotFoundError extends ApiError {
      * @member {number}
      */
     this.statusCode = 404;
-
-    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
   }
 }
 
@@ -172,8 +168,6 @@ class UnauthorizedAccessError extends ApiError {
      * @member {number}
      */
     this.statusCode = 401;
-
-    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
   }
 }
 
@@ -202,8 +196,6 @@ class ForbiddenOperationError extends ApiError {
      * @member {number}
      */
     this.statusCode = 403;
-
-    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
   }
 }
 
@@ -232,8 +224,6 @@ class JwtTokenExpiredError extends ApiError {
      * @member {number}
      */
     this.statusCode = 401;
-
-    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
   }
 }
 
@@ -262,8 +252,6 @@ class NoJwtTokenError extends ApiError {
      * @member {number}
      */
     this.statusCode = 401;
-
-    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
   }
 }
 
@@ -292,8 +280,6 @@ class JwtTokenSignatureError extends ApiError {
      * @member {number}
      */
     this.statusCode = 401;
-
-    debug(`${ns}:new: created '${JSON.stringify(this)}'`);
   }
 }
 
