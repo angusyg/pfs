@@ -10,7 +10,7 @@
 
 const http = require('http');
 const app = require('../app');
-const { logger } = require('../helpers/logger')();
+const logger = require('../helpers/logger');
 
 /**
  * Normalizes a port into a number, string, or false.

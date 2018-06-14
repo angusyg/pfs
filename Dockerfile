@@ -36,6 +36,11 @@ WORKDIR /usr/src/app
 # App checkout master branch
 RUN git checkout master
 
+# App install
+RUN npm install
+RUN npm build
+RUN npm prune --production
+
 ENV NODE_ENV production
 ENV PORT 3000
 ENV TOKEN_SECRET JWTSECRET
@@ -44,9 +49,6 @@ ENV WEB_FOLDER /usr/src/app/web
 ENV DB_FOLDER /usr/src/app/data
 ENV LOG_FOLDER /usr/src/app/log
 ENV PM2 true
-
-# App install
-RUN npm install
 
 # Expose app port
 EXPOSE ${PORT}

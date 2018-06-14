@@ -42,5 +42,14 @@
           </div>
         </form>`
       );
+      $templateCache.put('PERMISSION-DIRECTIVE',
+        `<div ng-click="perm.exit()">
+          <div class="modal-header">
+            <h4 class="modal-title mx-auto" id="modal-header">
+              <img src="{{'AUTH_PERM_LOGO' | translate}}" class="rounded mx-auto d-block mid" alt="avatar">{{'AUTH_BAD_ROLE' | translate}}
+            </h4>
+          </div>
+        </div>`
+      );
     }]);
 })();

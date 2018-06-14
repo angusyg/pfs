@@ -8,7 +8,10 @@
     .module('frontend.home')
     .config(Routing);
 
-  Routing.$inject = ['$stateProvider', 'USER_ROLES'];
+  Routing.$inject = [
+    '$stateProvider',
+    'USER_ROLES',
+  ];
 
   function Routing($stateProvider, USER_ROLES) {
     const homeState = {

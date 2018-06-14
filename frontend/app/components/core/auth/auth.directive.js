@@ -7,11 +7,18 @@
 
   angular
     .module('frontend.core.auth')
-    .directive('authDialog', AuthDialog);
+    .directive('authDialog', AuthDialog)
+    .directive('permissionDialog', PermissionDialog);
 
-  AuthDialog.$inject = ['$state', '$uibModal', '$templateCache', 'AUTH_EVENTS'];
+  AuthDialog.$inject = [
+    '$state',
+    '$uibModal',
+    '$templateCache',
+    'AUTH_EVENTS',
+    'AUTH_EVENTS_TYPE',
+  ];
 
-  function AuthDialog($state, $uibModal, $templateCache, AUTH_EVENTS) {
+  function AuthDialog($state, $uibModal, $templateCache, AUTH_EVENTS, AUTH_EVENTS_TYPE) {
     return {
       restrict: 'E',
       link: link,
@@ -34,16 +41,24 @@
           });
 
           loggedIn.result
-            .then(() => $state.go(data.$to()))
+            .then(() => {
+              if (data.type === AUTH_EVENTS_TYPE.STATE_TRANSITION) $state.go(data.data.$to());
+            })
             .finally(() => loginInProgress = false);
         }
       };
       scope.$on(AUTH_EVENTS.NOT_AUTHENTICATED, show);
     }
 
-    ModalController.$inject = ['$uibModalInstance', 'authService', '$timeout', 'PARAMETERS'];
+    ModalController.$inject = [
+      '$uibModalInstance',
+      'authService',
+      '$timeout',
+      'PARAMETERS',
+      'HTTP_STATUS_CODE',
+    ];
 
-    function ModalController($uibModalInstance, authService, $timeout, PARAMETERS) {
+    function ModalController($uibModalInstance, authService, $timeout, PARAMETERS, HTTP_STATUS_CODE) {
       const vm = this;
       vm.user = {
         login: '',
@@ -56,10 +71,51 @@
         authService.login(vm.user)
           .then(() => $uibModalInstance.close())
           .catch((err) => {
-            if (err.status === 401) vm.error = err.data.code;
+            if (err.status === HTTP_STATUS_CODE.UNAUTHORIZED && err.data.code) vm.error = err.data.code;
             else vm.error = 0;
             $timeout(() => vm.error = null, PARAMETERS.TOOLTIP_DURATION);
           });
+      }
+    }
+  }
+
+  PermissionDialog.$inject = [
+    '$state',
+    '$uibModal',
+    '$templateCache',
+    'AUTH_EVENTS',
+    'AUTH_EVENTS_TYPE',
+  ];
+
+  function PermissionDialog($state, $uibModal, $templateCache, AUTH_EVENTS, AUTH_EVENTS_TYPE) {
+    return {
+      restrict: 'E',
+      link: link,
+    };
+
+    function link(scope) {
+      const show = (event, data) => {
+        $uibModal.open({
+          animation: true,
+          template: $templateCache.get('PERMISSION-DIRECTIVE'),
+          windowClass: 'frontend-app',
+          size: 'dialog-centered modal-sm',
+          controller: ModalPermController,
+          controllerAs: 'perm',
+          backdrop: true,
+        });
+      };
+      scope.$on(AUTH_EVENTS.NOT_AUTHORIZED, show);
+    }
+
+    ModalPermController.$inject = ['$uibModalInstance'];
+
+    function ModalPermController($uibModalInstance) {
+      const vm = this;
+      vm.exit = exit;
+
+      function exit() {
+        $uibModalInstance.close();
       }
     }
   }

@@ -47,7 +47,7 @@ router.post(loginPath, apiController.login);
  * @code {401} if login is not valid
  * @name logout
  */
-router.get(logoutPath, security.requiresLogin(), apiController.logout);
+router.get(logoutPath, security.requiresLogin, apiController.logout);
 
 /**
  * @path {GET} /refresh
@@ -59,6 +59,6 @@ router.get(logoutPath, security.requiresLogin(), apiController.logout);
  * @code {500} if an unexpected error occurred
  * @name refresh
  */
-router.get(refreshPath, apiController.refreshToken);
+router.get(refreshPath, security.requiresLogin, apiController.refreshToken);
 
 module.exports = router;

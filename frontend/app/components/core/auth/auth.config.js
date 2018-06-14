@@ -9,7 +9,13 @@
     .module('frontend.core.auth')
     .config(Config);
 
-  Config.$inject = ['$httpProvider', '$translateProvider', '$translatePartialLoaderProvider', 'SECURITY', 'TRANSLATE'];
+  Config.$inject = [
+    '$httpProvider',
+    '$translateProvider',
+    '$translatePartialLoaderProvider',
+    'SECURITY',
+    'TRANSLATE',
+  ];
 
   function Config($httpProvider, $translateProvider, $translatePartialLoaderProvider, SECURITY, TRANSLATE) {
     if (SECURITY.ACTIVATED) $httpProvider.interceptors.push('authInterceptor');

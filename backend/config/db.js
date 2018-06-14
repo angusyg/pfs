@@ -10,11 +10,11 @@
 const path = require('path');
 const fs = require('fs');
 const camo = require('camo');
-const { logger } = require('../helpers/logger')();
+const logger = require('../helpers/logger');
 
 // Creates db folder if it does not exists
 const dbFolder = process.env.DB_FOLDER || path.join(__dirname, '..', '..', 'data');
-if (!fs.existsSync(dbFolder)) fs.mkdirSync(dbFolder);
+if (dbFolder !== 'memory' && !fs.existsSync(dbFolder)) fs.mkdirSync(dbFolder);
 
 /**
  * Connect app to NeDB database
