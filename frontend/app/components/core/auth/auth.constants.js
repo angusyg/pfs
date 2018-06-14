@@ -36,6 +36,8 @@
         AUTH_BTN_CONNEXION: 'Connexion',
         AUTH_PLACEHOLDER_LOGIN: 'Login',
         AUTH_PLACEHOLDER_PASSWORD: 'Mot de passe',
+        AUTH_BAD_ROLE: 'Droits insuffisants',
+        AUTH_PERM_LOGO: 'images/cancel.png',
       },
       EN: {
         APP_LOGO: 'images/hello-world.png',
@@ -46,6 +48,8 @@
         AUTH_BTN_CONNEXION: 'Connection',
         AUTH_PLACEHOLDER_LOGIN: 'Login',
         AUTH_PLACEHOLDER_PASSWORD: 'Password',
+        AUTH_BAD_ROLE: 'Bad role',
+        AUTH_PERM_LOGO: 'images/cancel.png',
       }
     });
 })();

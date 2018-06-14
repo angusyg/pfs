@@ -142,7 +142,7 @@
     function stateSecurization() {
       if (SECURITY.ACTIVATED) {
         $transitions.onStart({ to: '*' }, (trans) => {
-          const toState = trans.$to();
+          const toState = trans.to();
           if (toState.data && toState.data.authorizedRoles) {
             if (!isLoggedIn()) {
               $rootScope.$broadcast(AUTH_EVENTS.NOT_AUTHENTICATED, {

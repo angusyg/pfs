@@ -15,6 +15,10 @@ body {
 
     img {
       width: 100px;
+
+      &.mid {
+        width: 48px;
+      }
     }
   }
 
