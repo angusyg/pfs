@@ -15,7 +15,6 @@ const config = require('../config/app');
  * @class
  * @extends external:camo.Document
  * @name User
- * @param {external:Error|string} [arg] - Error to convert or string key of endpoint error
  */
 class User extends Document {
   constructor() {
