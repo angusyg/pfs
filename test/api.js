@@ -17,12 +17,6 @@ const initEnv = () => {
   process.env.TOKEN_SECRET = 'TOKEN_SECRET';
 };
 
-const initDb = (done) => {
-  camo.connect(`nedb://${process.env.DB_FOLDER}`)
-    .then(() => done())
-    .catch(err => done(err));
-};
-
 describe('API integration tests', () => {
   let app;
   let config;
@@ -33,10 +27,9 @@ describe('API integration tests', () => {
     require('../backend/bin/www');
     config = require('../backend/config/api')
     app.on("appStarted", () => {
-      initDb(done);
+      done();
     });
   });
-
 
   describe('GET /urlnotfound', () => {
     it('returns a 404 error', done => {
