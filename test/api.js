@@ -32,7 +32,7 @@ describe('API integration tests', () => {
   });
 
   describe('GET /urlnotfound', () => {
-    it('returns a 404 error', done => {
+    it('returns a 404 error', (done) => {
       request(app)
         .get('/notfound')
         .end((err, res) => {
@@ -59,7 +59,7 @@ describe('API integration tests', () => {
         .then(() => done());
     });
 
-    it('OK: returns authentication tokens', done => {
+    it('OK: returns authentication tokens', (done) => {
       request(app)
         .post('/api/login')
         .send({
@@ -84,7 +84,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns bad login error', done => {
+    it('ERROR: returns bad login error', (done) => {
       request(app)
         .post('/api/login')
         .send({
@@ -103,7 +103,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns bad password error', done => {
+    it('ERROR: returns bad password error', (done) => {
       request(app)
         .post('/api/login')
         .send({
@@ -170,7 +170,7 @@ describe('API integration tests', () => {
       ]).then(() => done());
     });
 
-    it('OK: returns an access token', done => {
+    it('OK: returns an access token', (done) => {
       request(app)
         .get('/api/refresh')
         .set(config.accessTokenHeader, `bearer ${accessToken}`)
@@ -189,7 +189,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns an unauthorized error', done => {
+    it('ERROR: returns an unauthorized error', (done) => {
       request(app)
         .get('/api/refresh')
         .set(config.accessTokenHeader, `bearer ${accessTokenBadRefresh}`)
@@ -206,7 +206,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns an user not found error', done => {
+    it('ERROR: returns an user not found error', (done) => {
       request(app)
         .get('/api/refresh')
         .set(config.accessTokenHeader, `bearer ${accessTokenBadLogin}`)
@@ -223,7 +223,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns a missing refresh token error', done => {
+    it('ERROR: returns a missing refresh token error', (done) => {
       request(app)
         .get('/api/refresh')
         .set(config.accessTokenHeader, `bearer ${accessToken}`)
@@ -279,7 +279,7 @@ describe('API integration tests', () => {
         .then(() => done());
     });
 
-    it('OK: returns no content', done => {
+    it('OK: returns no content', (done) => {
       request(app)
         .get('/api/logout')
         .set(config.accessTokenHeader, `bearer ${accessToken}`)
@@ -291,7 +291,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns a no token error', done => {
+    it('ERROR: returns a no token error', (done) => {
       request(app)
         .get('/api/logout')
         .end((err, res) => {
@@ -305,7 +305,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns an invalid token signature error', done => {
+    it('ERROR: returns an invalid token signature error', (done) => {
       request(app)
         .get('/api/logout')
         .set(config.accessTokenHeader, `bearer ${accessTokenBadSignature}`)
@@ -320,7 +320,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns an expired token error', done => {
+    it('ERROR: returns an expired token error', (done) => {
       request(app)
         .get('/api/logout')
         .set(config.accessTokenHeader, `bearer ${accessTokenExpired}`)
