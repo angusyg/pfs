@@ -92,32 +92,6 @@ class ApiError extends Error {
 }
 
 /**
- * Creates an AuthenticationExpiredError
- * @class
- * @extends {ApiError}
- */
-class AuthenticationExpiredError extends ApiError {
-  constructor() {
-    super('Expired access token', 'Access token has expired');
-
-    /**
-     * Name of the error
-     * @default AuthenticationExpiredError
-     * @member {string}
-     */
-    this.name = this.constructor.name;
-    Error.captureStackTrace(this, this.constructor);
-
-    /**
-     * HTTP status code of the response to be send
-     * @default 419
-     * @member {number}
-     */
-    this.statusCode = 419;
-  }
-}
-
-/**
  * Url not found error class module to create and convert error to json response
  * @class
  * @extends {ApiError}
@@ -177,10 +151,8 @@ class UnauthorizedAccessError extends ApiError {
  * @extends {ApiError}
  */
 class ForbiddenOperationError extends ApiError {
-  constructor(...args) {
-    if (args.length === 1) super(http.STATUS_CODES[403], args[0]);
-    else if (args.length === 2) super(args[0], args[1]);
-    else super(http.STATUS_CODES[403], 'Not authorized to perform operation');
+  constructor() {
+    super(http.STATUS_CODES[403], 'Not authorized to perform operation');
 
     /**
      * Name of the error
@@ -205,10 +177,8 @@ class ForbiddenOperationError extends ApiError {
  * @extends {ApiError}
  */
 class JwtTokenExpiredError extends ApiError {
-  constructor(...args) {
-    if (args.length === 1) super('TOKEN_EXPIRED', args[0]);
-    else if (args.length === 2) super(args[0], args[1]);
-    else super('TOKEN_EXPIRED', 'Jwt token has expired');
+  constructor() {
+    super('TOKEN_EXPIRED', 'Jwt token has expired');
 
     /**
      * Name of the error
@@ -233,10 +203,8 @@ class JwtTokenExpiredError extends ApiError {
  * @extends {ApiError}
  */
 class NoJwtTokenError extends ApiError {
-  constructor(...args) {
-    if (args.length === 1) super('NO_TOKEN_FOUND', args[0]);
-    else if (args.length === 2) super(args[0], args[1]);
-    else super('NO_TOKEN_FOUND', 'No Jwt token found in authorization header');
+  constructor() {
+    super('NO_TOKEN_FOUND', 'No Jwt token found in authorization header');
 
     /**
      * Name of the error
@@ -261,10 +229,8 @@ class NoJwtTokenError extends ApiError {
  * @extends {ApiError}
  */
 class JwtTokenSignatureError extends ApiError {
-  constructor(...args) {
-    if (args.length === 1) super('INVALID_TOKEN_SIGNATURE', args[0]);
-    else if (args.length === 2) super(args[0], args[1]);
-    else super('INVALID_TOKEN_SIGNATURE', 'Jwt token signature is invalid');
+  constructor() {
+    super('INVALID_TOKEN_SIGNATURE', 'Jwt token signature is invalid');
 
     /**
      * Name of the error
@@ -285,7 +251,6 @@ class JwtTokenSignatureError extends ApiError {
 
 module.exports = {
   ApiError,
-  AuthenticationExpiredError,
   NotFoundError,
   UnauthorizedAccessError,
   ForbiddenOperationError,
