@@ -4,7 +4,8 @@
   "description": "NeDB Express Angularjs Nodejs application stack",
   "main": "./backend/bin/www",
   "scripts": {
-    "test": "mocha test/tests.js --timeout 10000 --exit",
+    "test:ti": "mocha test/tests.js --timeout 10000 --exit",
+    "test:tu": "mocha backend/**/*.spec.js --timeout 10000 --exit",
     "dev": "concurrently \"npm run dev:back\" \"npm run dev:front\"",
     "dev:back": "cross-env NODE_ENV=development cross-env DEBUG=nean:* nodemon",
     "dev:front": "cross-env NODE_ENV=development gulp",
@@ -89,6 +90,7 @@
     "nodemon": "^1.17.5",
     "pump": "^3.0.0",
     "run-sequence": "^2.2.1",
+    "sinon": "^6.0.0",
     "supertest": "^3.1.0"
   }
 }
