@@ -6,11 +6,11 @@
  */
 
 /**
- * Checks if user has permission to call endpoint
- * @callback checkPermission
- * @param  {external:Request}          req  - Request received
- * @param  {external:Response}         res  - Response to be send
- * @param  {nextMiddleware}   next - Callback to pass control to next middleware
+ * Checks if user has role to call endpoint
+ * @callback checkRole
+ * @param  {external:Request}   req  - Request received
+ * @param  {external:Response}  res  - Response to be send
+ * @param  {nextMiddleware}     next - Callback to pass control to next middleware
  */
 
 /**

@@ -12,17 +12,13 @@ const expect = chai.expect;
 const uuid = /^[A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$/i;
 const jwtVerify = util.promisify(jsonwebtoken.verify);
 
-const initEnv = () => {
-  process.env.DB_FOLDER = 'memory';
-  process.env.TOKEN_SECRET = 'TOKEN_SECRET';
-};
-
 describe('API integration tests', () => {
   let app;
   let config;
 
   before((done) => {
-    initEnv();
+    process.env.DB_FOLDER = 'memory';
+    process.env.TOKEN_SECRET = 'TOKEN_SECRET';
     app = require('../backend/app');
     require('../backend/bin/www');
     config = require('../backend/config/api')
@@ -39,8 +35,8 @@ describe('API integration tests', () => {
           expect(res.statusCode).to.equal(404);
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.own.property('code', 'Not Found');
-          expect(res.body).to.have.own.property('message', 'No endpoint mapped for requested url');
+          expect(res.body).to.have.own.property('code', 'NOT_FOUND');
+          expect(res.body).to.have.own.property('message', 'Not Found');
           expect(res.body).to.have.own.property('reqId');
           expect(res.body.reqId).to.match(uuid);
           done();
@@ -56,6 +52,11 @@ describe('API integration tests', () => {
           roles: ['USER'],
         })
         .save()
+        .then(() => done());
+    });
+
+    after((done) => {
+      User.deleteOne({ login: 'test' })
         .then(() => done());
     });
 
@@ -121,37 +122,29 @@ describe('API integration tests', () => {
           done();
         });
     });
-
-    after((done) => {
-      User.deleteOne({ login: 'test' })
-        .then(() => done());
-    });
   });
 
   describe('GET /api/refresh', () => {
-    let accessTokenBadLogin = '';
-    let accessTokenBadRefresh = '';
-    let accessToken = '';
-    let refreshToken = '';
+    let accessTokenBadLogin;
+    let accessTokenBadRefresh;
+    let accessToken;
+    let refreshToken;
 
     before((done) => {
       accessToken = jsonwebtoken.sign({
         login: 'test',
         roles: ['USER'],
       }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
-
       accessTokenBadRefresh = jsonwebtoken.sign({
         login: 'test1',
         roles: ['USER'],
       }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
-
       accessTokenBadLogin = jsonwebtoken.sign({
         login: 'test2',
         roles: ['USER'],
       }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
-
-
       refreshToken = uuidv4();
+
       Promise.all([
         User.create({
           login: 'test',
@@ -168,6 +161,14 @@ describe('API integration tests', () => {
         })
         .save()
       ]).then(() => done());
+    });
+
+    after((done) => {
+      Promise.all([
+          User.deleteOne({ login: 'test' }),
+          User.deleteOne({ login: 'test1' })
+        ])
+        .then(() => done());
     });
 
     it('OK: returns an access token', (done) => {
@@ -232,38 +233,28 @@ describe('API integration tests', () => {
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.own.property('code', 'MISSING_REFRESH_TOKEN');
-          expect(res.body).to.have.own.property('message', 'Refresh token missing');
+          expect(res.body).to.have.own.property('message', 'Refresh token\'s missing');
           expect(res.body).to.have.own.property('reqId');
           expect(res.body.reqId).to.match(uuid);
           done();
         });
     });
-
-    after((done) => {
-      Promise.all([
-          User.deleteOne({ login: 'test' }),
-          User.deleteOne({ login: 'test1' })
-        ])
-        .then(() => done());
-    });
   });
 
   describe('GET /logout', () => {
-    let accessToken = '';
-    let accessTokenBadSignature = '';
-    let accessTokenExpired = '';
+    let accessToken;
+    let accessTokenBadSignature;
+    let accessTokenExpired;
 
     before((done) => {
       accessToken = jsonwebtoken.sign({
         login: 'test',
         roles: ['USER'],
       }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
-
       accessTokenBadSignature = jsonwebtoken.sign({
         login: 'test',
         roles: ['USER'],
       }, ' ', { expiresIn: config.accessTokenExpirationTime });
-
       accessTokenExpired = jsonwebtoken.sign({
         login: 'test',
         roles: ['USER'],
@@ -276,6 +267,11 @@ describe('API integration tests', () => {
           refreshToken: '',
         })
         .save()
+        .then(() => done());
+    });
+
+    after((done) => {
+      User.deleteOne({ login: 'test' })
         .then(() => done());
     });
 
@@ -333,11 +329,6 @@ describe('API integration tests', () => {
           expect(res.body).to.have.own.property('reqId');
           done();
         });
-    });
-
-    after((done) => {
-      User.deleteOne({ login: 'test' })
-        .then(() => done());
     });
   });
 });

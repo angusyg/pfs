@@ -8,37 +8,37 @@ const expect = chai.expect;
 
 describe('Module models/errors', () => {
   it('should export ApiError', (done) => {
-    expect(errors).to.have.property('ApiError');
+    expect(errors).to.have.own.property('ApiError').to.be.a('function');
     done();
   });
 
   it('should export NotFoundError', (done) => {
-    expect(errors).to.have.property('NotFoundError');
+    expect(errors).to.have.own.property('NotFoundError').to.be.a('function');
     done();
   });
 
   it('should export UnauthorizedAccessError', (done) => {
-    expect(errors).to.have.property('UnauthorizedAccessError');
+    expect(errors).to.have.own.property('UnauthorizedAccessError').to.be.a('function');
     done();
   });
 
   it('should export ForbiddenOperationError', (done) => {
-    expect(errors).to.have.property('ForbiddenOperationError');
+    expect(errors).to.have.own.property('ForbiddenOperationError').to.be.a('function');
     done();
   });
 
   it('should export JwtTokenExpiredError', (done) => {
-    expect(errors).to.have.property('JwtTokenExpiredError');
+    expect(errors).to.have.own.property('JwtTokenExpiredError').to.be.a('function');
     done();
   });
 
   it('should export NoJwtTokenError', (done) => {
-    expect(errors).to.have.property('NoJwtTokenError');
+    expect(errors).to.have.own.property('NoJwtTokenError').to.be.a('function');
     done();
   });
 
   it('should export JwtTokenSignatureError', (done) => {
-    expect(errors).to.have.property('JwtTokenSignatureError');
+    expect(errors).to.have.own.property('JwtTokenSignatureError').to.be.a('function');
     done();
   });
 
@@ -69,32 +69,32 @@ describe('Module models/errors', () => {
         const error = new ApiError();
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
-        expect(error.name).to.be.equal('ApiError');
-        expect(error.statusCode).to.be.equal(500);
-        expect(error.code).to.be.equal('Internal Server Error');
-        expect(error.message).to.be.equal('An unknown server error occured while processing request');
+        expect(error).to.have.own.property('name', 'ApiError');
+        expect(error).to.have.own.property('statusCode', 500);
+        expect(error).to.have.own.property('code', 'INTERNAL_SERVER_ERROR');
+        expect(error).to.have.own.property('message', 'An unknown server error occured while processing request');
         done();
       });
 
       it('constructor(a: string): should return an ApiError with custom message', (done) => {
-        const error = new ApiError('test message');
+        const error = new ApiError('MESSAGE');
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
-        expect(error.name).to.be.equal('ApiError');
-        expect(error.statusCode).to.be.equal(500);
-        expect(error.code).to.be.equal('Internal Server Error');
-        expect(error.message).to.be.equal('test message');
+        expect(error).to.have.own.property('name', 'ApiError');
+        expect(error).to.have.own.property('statusCode', 500);
+        expect(error).to.have.own.property('code', 'INTERNAL_SERVER_ERROR');
+        expect(error).to.have.own.property('message', 'MESSAGE');
         done();
       });
 
       it('constructor(a: Error): should return an ApiError with error message', (done) => {
-        const error = new ApiError(new Error('test message'));
+        const error = new ApiError(new Error('MESSAGE'));
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
-        expect(error.name).to.be.equal('ApiError');
-        expect(error.statusCode).to.be.equal(500);
-        expect(error.code).to.be.equal('Internal Server Error');
-        expect(error.message).to.be.equal('test message');
+        expect(error).to.have.own.property('name', 'ApiError');
+        expect(error).to.have.own.property('statusCode', 500);
+        expect(error).to.have.own.property('code', 'INTERNAL_SERVER_ERROR');
+        expect(error).to.have.own.property('message', 'MESSAGE');
         done();
       });
 
@@ -102,10 +102,10 @@ describe('Module models/errors', () => {
         const error = new ApiError(['CODE', 'MESSAGE']);
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
-        expect(error.name).to.be.equal('ApiError');
-        expect(error.statusCode).to.be.equal(500);
-        expect(error.code).to.be.equal('CODE');
-        expect(error.message).to.be.equal('MESSAGE');
+        expect(error).to.have.own.property('name', 'ApiError');
+        expect(error).to.have.own.property('statusCode', 500);
+        expect(error).to.have.own.property('code', 'CODE');
+        expect(error).to.have.own.property('message', 'MESSAGE');
         done();
       });
 
@@ -118,10 +118,10 @@ describe('Module models/errors', () => {
         const error = new ApiError('CODE', 'MESSAGE');
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
-        expect(error.name).to.be.equal('ApiError');
-        expect(error.statusCode).to.be.equal(500);
-        expect(error.code).to.be.equal('CODE');
-        expect(error.message).to.be.equal('MESSAGE');
+        expect(error).to.have.own.property('name', 'ApiError');
+        expect(error).to.have.own.property('statusCode', 500);
+        expect(error).to.have.own.property('code', 'CODE');
+        expect(error).to.have.own.property('message', 'MESSAGE');
         done();
       });
 
@@ -141,7 +141,7 @@ describe('Module models/errors', () => {
         expect(status.calledWith(500)).to.be.ok;
         expect(json.calledOnce).to.be.true;
         expect(json.calledWith({
-          code: 'Internal Server Error',
+          code: 'INTERNAL_SERVER_ERROR',
           message: 'An unknown server error occured while processing request',
           reqId: 'UUID',
         })).to.be.ok;
@@ -154,7 +154,7 @@ describe('Module models/errors', () => {
         expect(status.calledWith(500)).to.be.ok;
         expect(json.calledOnce).to.be.true;
         expect(json.calledWith({
-          code: 'Internal Server Error',
+          code: 'INTERNAL_SERVER_ERROR',
           message: 'MESSAGE',
           reqId: 'UUID',
         })).to.be.ok;
@@ -167,7 +167,7 @@ describe('Module models/errors', () => {
         expect(status.calledWith(500)).to.be.ok;
         expect(json.calledOnce).to.be.true;
         expect(json.calledWith({
-          code: 'Internal Server Error',
+          code: 'INTERNAL_SERVER_ERROR',
           message: 'MESSAGE',
           reqId: 'UUID',
         })).to.be.ok;
@@ -181,10 +181,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(UnauthorizedAccessError);
-        expect(error.name).to.be.equal('UnauthorizedAccessError');
-        expect(error.statusCode).to.be.equal(401);
-        expect(error.code).to.be.equal('Unauthorized');
-        expect(error.message).to.be.equal('Not authorized to access to this resource');
+        expect(error).to.have.own.property('name', 'UnauthorizedAccessError');
+        expect(error).to.have.own.property('statusCode', 401);
+        expect(error).to.have.own.property('code', 'UNAUTHORIZED');
+        expect(error).to.have.own.property('message', 'Unauthorized');
         done();
       });
 
@@ -193,10 +193,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(UnauthorizedAccessError);
-        expect(error.name).to.be.equal('UnauthorizedAccessError');
-        expect(error.statusCode).to.be.equal(401);
-        expect(error.code).to.be.equal('Unauthorized');
-        expect(error.message).to.be.equal('MESSAGE');
+        expect(error).to.have.own.property('name', 'UnauthorizedAccessError');
+        expect(error).to.have.own.property('statusCode', 401);
+        expect(error).to.have.own.property('code', 'UNAUTHORIZED');
+        expect(error).to.have.own.property('message', 'MESSAGE');
         done();
       });
 
@@ -205,10 +205,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(UnauthorizedAccessError);
-        expect(error.name).to.be.equal('UnauthorizedAccessError');
-        expect(error.statusCode).to.be.equal(401);
-        expect(error.code).to.be.equal('CODE');
-        expect(error.message).to.be.equal('MESSAGE');
+        expect(error).to.have.own.property('name', 'UnauthorizedAccessError');
+        expect(error).to.have.own.property('statusCode', 401);
+        expect(error).to.have.own.property('code', 'CODE');
+        expect(error).to.have.own.property('message', 'MESSAGE');
         done();
       });
 
@@ -232,10 +232,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(UnauthorizedAccessError);
-        expect(error.name).to.be.equal('UnauthorizedAccessError');
-        expect(error.statusCode).to.be.equal(401);
-        expect(error.code).to.be.equal('Unauthorized');
-        expect(error.message).to.be.equal('Not authorized to access to this resource');
+        expect(error).to.have.own.property('name', 'UnauthorizedAccessError');
+        expect(error).to.have.own.property('statusCode', 401);
+        expect(error).to.have.own.property('code', 'UNAUTHORIZED');
+        expect(error).to.have.own.property('message', 'Unauthorized');
         done();
       });
     });
@@ -246,10 +246,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(NotFoundError);
-        expect(error.name).to.be.equal('NotFoundError');
-        expect(error.statusCode).to.be.equal(404);
-        expect(error.code).to.be.equal('Not Found');
-        expect(error.message).to.be.equal('No endpoint mapped for requested url');
+        expect(error).to.have.own.property('name', 'NotFoundError');
+        expect(error).to.have.own.property('statusCode', 404);
+        expect(error).to.have.own.property('code', 'NOT_FOUND');
+        expect(error).to.have.own.property('message', 'Not Found');
         done();
       });
     });
@@ -260,10 +260,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(ForbiddenOperationError);
-        expect(error.name).to.be.equal('ForbiddenOperationError');
-        expect(error.statusCode).to.be.equal(403);
-        expect(error.code).to.be.equal('Forbidden');
-        expect(error.message).to.be.equal('Not authorized to perform operation');
+        expect(error).to.have.own.property('name', 'ForbiddenOperationError');
+        expect(error).to.have.own.property('statusCode', 403);
+        expect(error).to.have.own.property('code', 'FORBIDDEN_OPERATION');
+        expect(error).to.have.own.property('message', 'Forbidden');
         done();
       });
     });
@@ -274,10 +274,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(JwtTokenExpiredError);
-        expect(error.name).to.be.equal('JwtTokenExpiredError');
-        expect(error.statusCode).to.be.equal(401);
-        expect(error.code).to.be.equal('TOKEN_EXPIRED');
-        expect(error.message).to.be.equal('Jwt token has expired');
+        expect(error).to.have.own.property('name', 'JwtTokenExpiredError');
+        expect(error).to.have.own.property('statusCode', 401);
+        expect(error).to.have.own.property('code', 'TOKEN_EXPIRED');
+        expect(error).to.have.own.property('message', 'Jwt token has expired');
         done();
       });
     });
@@ -288,10 +288,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(NoJwtTokenError);
-        expect(error.name).to.be.equal('NoJwtTokenError');
-        expect(error.statusCode).to.be.equal(401);
-        expect(error.code).to.be.equal('NO_TOKEN_FOUND');
-        expect(error.message).to.be.equal('No Jwt token found in authorization header');
+        expect(error).to.have.own.property('name', 'NoJwtTokenError');
+        expect(error).to.have.own.property('statusCode', 401);
+        expect(error).to.have.own.property('code', 'NO_TOKEN_FOUND');
+        expect(error).to.have.own.property('message', 'No Jwt token found in authorization header');
         done();
       });
     });
@@ -302,10 +302,10 @@ describe('Module models/errors', () => {
         expect(error).to.be.an.instanceof(Error);
         expect(error).to.be.an.instanceof(ApiError);
         expect(error).to.be.an.instanceof(JwtTokenSignatureError);
-        expect(error.name).to.be.equal('JwtTokenSignatureError');
-        expect(error.statusCode).to.be.equal(401);
-        expect(error.code).to.be.equal('INVALID_TOKEN_SIGNATURE');
-        expect(error.message).to.be.equal('Jwt token signature is invalid');
+        expect(error).to.have.own.property('name', 'JwtTokenSignatureError');
+        expect(error).to.have.own.property('statusCode', 401);
+        expect(error).to.have.own.property('code', 'INVALID_TOKEN_SIGNATURE');
+        expect(error).to.have.own.property('message', 'Jwt token signature is invalid');
         done();
       });
     });

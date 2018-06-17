@@ -34,7 +34,7 @@ class ApiError extends Error {
      * @default Internal Server Error
      * @member {string}
      */
-    this.code = http.STATUS_CODES[500];
+    this.code = 'INTERNAL_SERVER_ERROR';
 
     /**
      * HTTP status code of the response to be send
@@ -98,7 +98,7 @@ class ApiError extends Error {
  */
 class NotFoundError extends ApiError {
   constructor() {
-    super(http.STATUS_CODES[404], 'No endpoint mapped for requested url');
+    super('NOT_FOUND', http.STATUS_CODES[404]);
 
     /**
      * Name of the error
@@ -124,9 +124,9 @@ class NotFoundError extends ApiError {
  */
 class UnauthorizedAccessError extends ApiError {
   constructor(...args) {
-    if (args.length === 1) super(http.STATUS_CODES[401], args[0]);
+    if (args.length === 1) super('UNAUTHORIZED', args[0]);
     else if (args.length === 2) super(args[0], args[1]);
-    else super(http.STATUS_CODES[401], 'Not authorized to access to this resource');
+    else super('UNAUTHORIZED', http.STATUS_CODES[401]);
 
     /**
      * Name of the error
@@ -152,7 +152,7 @@ class UnauthorizedAccessError extends ApiError {
  */
 class ForbiddenOperationError extends ApiError {
   constructor() {
-    super(http.STATUS_CODES[403], 'Not authorized to perform operation');
+    super('FORBIDDEN_OPERATION', http.STATUS_CODES[403]);
 
     /**
      * Name of the error

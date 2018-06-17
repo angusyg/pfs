@@ -24,7 +24,7 @@ const connect = () => {
   camo.connect(`nedb://${dbFolder}`)
     .then(() => logger.info(`Connection opened to DB 'nedb://${dbFolder}'`))
     .catch((err) => {
-      logger.error(`Error during DB connection : ${JSON.stringify(err)}`);
+      logger.fatal(`Error during DB connection : ${JSON.stringify(err)}`);
       process.exit(0);
     });
 };

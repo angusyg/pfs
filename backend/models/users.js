@@ -67,10 +67,9 @@ class User extends Document {
    * @return {Promise<boolean>} true if candidate password match, false if not
    */
   comparePassword(candidatePassword) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       bcrypt.compare(candidatePassword, this.password)
-        .then(match => resolve(match))
-        .catch(err => reject(err));
+        .then(match => resolve(match));
     });
   }
 
