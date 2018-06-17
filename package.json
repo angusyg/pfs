@@ -1,10 +1,12 @@
 {
   "name": "nean-stack",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "NeDB Express Angularjs Nodejs application stack",
   "main": "./backend/bin/www",
   "scripts": {
-    "test": "mocha test/tests.js --timeout 10000 --exit",
+    "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha backend/**/*.spec.js test/tests.js --timeout 10000 --exit",
+    "test:ti": "cross-env NODE_ENV=test mocha test/tests.js --timeout 10000 --exit",
+    "test:tu": "cross-env NODE_ENV=test mocha backend/**/*.spec.js --timeout 10000 --exit",
     "dev": "concurrently \"npm run dev:back\" \"npm run dev:front\"",
     "dev:back": "cross-env NODE_ENV=development cross-env DEBUG=nean:* nodemon",
     "dev:front": "cross-env NODE_ENV=development gulp",
@@ -27,6 +29,13 @@
   "bugs": {
     "url": "https://github.com/angusyg/nean-stack/issues"
   },
+  "nyc": {
+    "exclude": [
+      "**/*.spec.js",
+      "test/**/*.js"
+    ],
+    "temp-directory": "./coverage/.nyc_output"
+  },
   "homepage": "https://github.com/angusyg/nean-stack#readme",
   "dependencies": {
     "@uirouter/angularjs": "^1.0.18",
@@ -44,6 +53,7 @@
     "continuation-local-storage": "^3.2.1",
     "cors": "^2.8.4",
     "cross-env": "^5.2.0",
+    "cross-var": "^1.1.0",
     "csurf": "^1.9.0",
     "express": "^4.16.3",
     "express-pino-logger": "^3.0.1",
@@ -61,6 +71,7 @@
   "devDependencies": {
     "angular-jsdoc": "git+https://github.com/Monsido/angular-jsdoc.git",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "chai-http": "^4.0.0",
     "concurrently": "^3.5.1",
     "del": "^3.0.0",
@@ -84,11 +95,15 @@
     "gulp-uglify": "^3.0.0",
     "gulp-uglify-es": "^1.0.4",
     "gulp-util": "^3.0.8",
+    "istanbul": "^0.4.5",
     "jsdoc-http-plugin": "^0.3.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.17.5",
+    "nyc": "^12.0.2",
+    "proxyquire": "^2.0.1",
     "pump": "^3.0.0",
     "run-sequence": "^2.2.1",
+    "sinon": "^6.0.0",
     "supertest": "^3.1.0"
   }
 }

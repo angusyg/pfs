@@ -3,7 +3,6 @@
  * @module services/users
  * @requires {@link external:uuid/v4}
  * @requires {@link external:jsonwebtoken}
- * @requires {@link external:uuid/v4}
  * @requires config/api
  * @requires models/users
  * @requires models/errors
@@ -32,22 +31,6 @@ function generateAccessToken(user) {
 }
 
 /**
- * Generates a refresh and persist the token on user in database
- * @function registerRefreshToken
- * @private
- * @param   {Object} user - user informations
- * @returns {Promise<string>} refresh token if user had been given a new refresh token
- */
-function registerRefreshToken(user) {
-  return new Promise((resolve, reject) => {
-    const refreshToken = uuidv4();
-    User.findOneAndUpdate({ _id: user._id }, { refreshToken })
-      .then(() => resolve(refreshToken))
-      .catch(err => reject(err));
-  });
-}
-
-/**
  * Checks logins informations for user to connect
  * @method login
  * @param   {Object} infos - connection infos (login, password)
@@ -55,7 +38,6 @@ function registerRefreshToken(user) {
  */
 service.login = infos => new Promise((resolve, reject) => {
   User.findOne({ login: infos.login })
-    .catch(err => reject(err))
     .then((user) => {
       if (!user) reject(new UnauthorizedAccessError('BAD_LOGIN', 'Bad login'));
       else {
@@ -63,15 +45,13 @@ service.login = infos => new Promise((resolve, reject) => {
           .then((match) => {
             if (!match) reject(new UnauthorizedAccessError('BAD_PASSWORD', 'Bad password'));
             else {
-              registerRefreshToken(user)
-                .catch(err => reject(err))
-                .then(refreshToken => resolve({
-                  refreshToken,
+              User.findOneAndUpdate({ _id: user._id }, { refreshToken: uuidv4() })
+                .then(u => resolve({
+                  refreshToken: u.refreshToken,
                   accessToken: generateAccessToken(user),
                 }));
             }
-          })
-          .catch(err => reject(err));
+          });
       }
     });
 });
@@ -91,9 +71,8 @@ service.refreshToken = (user, refreshToken) => new Promise((resolve, reject) => 
           if (refreshToken === u.refreshToken) resolve({ accessToken: generateAccessToken(u) });
           else reject(new UnauthorizedAccessError('REFRESH_NOT_ALLOWED', 'Refresh token has been revoked'));
         } else reject(new ApiError('USER_NOT_FOUND', 'No user found for login in JWT Token'));
-      })
-      .catch(err => reject(err));
-  } else reject(new UnauthorizedAccessError('MISSING_REFRESH_TOKEN', 'Refresh token missing'));
+      });
+  } else reject(new UnauthorizedAccessError('MISSING_REFRESH_TOKEN', 'Refresh token\'s missing'));
 });
 
 module.exports = service;

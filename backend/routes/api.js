@@ -8,7 +8,7 @@
  */
 
 const express = require('express');
-const security = require('../helpers/security');
+const { requiresLogin } = require('../helpers/security');
 const { loginPath, logoutPath, loggerPath, refreshPath } = require('../config/api');
 const apiController = require('../controllers/api');
 
@@ -47,7 +47,7 @@ router.post(loginPath, apiController.login);
  * @code {401} if login is not valid
  * @name logout
  */
-router.get(logoutPath, security.requiresLogin, apiController.logout);
+router.get(logoutPath, requiresLogin, apiController.logout);
 
 /**
  * @path {GET} /refresh
@@ -59,6 +59,6 @@ router.get(logoutPath, security.requiresLogin, apiController.logout);
  * @code {500} if an unexpected error occurred
  * @name refresh
  */
-router.get(refreshPath, security.requiresLogin, apiController.refreshToken);
+router.get(refreshPath, requiresLogin, apiController.refreshToken);
 
 module.exports = router;

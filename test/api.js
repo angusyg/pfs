@@ -12,42 +12,31 @@ const expect = chai.expect;
 const uuid = /^[A-F\d]{8}-[A-F\d]{4}-4[A-F\d]{3}-[89AB][A-F\d]{3}-[A-F\d]{12}$/i;
 const jwtVerify = util.promisify(jsonwebtoken.verify);
 
-const initEnv = () => {
-  process.env.DB_FOLDER = 'memory';
-  process.env.TOKEN_SECRET = 'TOKEN_SECRET';
-};
-
-const initDb = (done) => {
-  camo.connect(`nedb://${process.env.DB_FOLDER}`)
-    .then(() => done())
-    .catch(err => done(err));
-};
-
 describe('API integration tests', () => {
   let app;
   let config;
 
   before((done) => {
-    initEnv();
+    process.env.DB_FOLDER = 'memory';
+    process.env.TOKEN_SECRET = 'TOKEN_SECRET';
     app = require('../backend/app');
     require('../backend/bin/www');
     config = require('../backend/config/api')
     app.on("appStarted", () => {
-      initDb(done);
+      done();
     });
   });
 
-
   describe('GET /urlnotfound', () => {
-    it('returns a 404 error', done => {
+    it('returns a 404 error', (done) => {
       request(app)
         .get('/notfound')
         .end((err, res) => {
           expect(res.statusCode).to.equal(404);
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
-          expect(res.body).to.have.own.property('code', 'Not Found');
-          expect(res.body).to.have.own.property('message', 'No endpoint mapped for requested url');
+          expect(res.body).to.have.own.property('code', 'NOT_FOUND');
+          expect(res.body).to.have.own.property('message', 'Not Found');
           expect(res.body).to.have.own.property('reqId');
           expect(res.body.reqId).to.match(uuid);
           done();
@@ -66,7 +55,12 @@ describe('API integration tests', () => {
         .then(() => done());
     });
 
-    it('OK: returns authentication tokens', done => {
+    after((done) => {
+      User.deleteOne({ login: 'test' })
+        .then(() => done());
+    });
+
+    it('OK: returns authentication tokens', (done) => {
       request(app)
         .post('/api/login')
         .send({
@@ -91,7 +85,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns bad login error', done => {
+    it('ERROR: returns bad login error', (done) => {
       request(app)
         .post('/api/login')
         .send({
@@ -110,7 +104,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns bad password error', done => {
+    it('ERROR: returns bad password error', (done) => {
       request(app)
         .post('/api/login')
         .send({
@@ -128,37 +122,29 @@ describe('API integration tests', () => {
           done();
         });
     });
-
-    after((done) => {
-      User.deleteOne({ login: 'test' })
-        .then(() => done());
-    });
   });
 
   describe('GET /api/refresh', () => {
-    let accessTokenBadLogin = '';
-    let accessTokenBadRefresh = '';
-    let accessToken = '';
-    let refreshToken = '';
+    let accessTokenBadLogin;
+    let accessTokenBadRefresh;
+    let accessToken;
+    let refreshToken;
 
     before((done) => {
       accessToken = jsonwebtoken.sign({
         login: 'test',
         roles: ['USER'],
       }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
-
       accessTokenBadRefresh = jsonwebtoken.sign({
         login: 'test1',
         roles: ['USER'],
       }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
-
       accessTokenBadLogin = jsonwebtoken.sign({
         login: 'test2',
         roles: ['USER'],
       }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
-
-
       refreshToken = uuidv4();
+
       Promise.all([
         User.create({
           login: 'test',
@@ -177,7 +163,15 @@ describe('API integration tests', () => {
       ]).then(() => done());
     });
 
-    it('OK: returns an access token', done => {
+    after((done) => {
+      Promise.all([
+          User.deleteOne({ login: 'test' }),
+          User.deleteOne({ login: 'test1' })
+        ])
+        .then(() => done());
+    });
+
+    it('OK: returns an access token', (done) => {
       request(app)
         .get('/api/refresh')
         .set(config.accessTokenHeader, `bearer ${accessToken}`)
@@ -196,7 +190,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns an unauthorized error', done => {
+    it('ERROR: returns an unauthorized error', (done) => {
       request(app)
         .get('/api/refresh')
         .set(config.accessTokenHeader, `bearer ${accessTokenBadRefresh}`)
@@ -213,7 +207,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns an user not found error', done => {
+    it('ERROR: returns an user not found error', (done) => {
       request(app)
         .get('/api/refresh')
         .set(config.accessTokenHeader, `bearer ${accessTokenBadLogin}`)
@@ -230,7 +224,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns a missing refresh token error', done => {
+    it('ERROR: returns a missing refresh token error', (done) => {
       request(app)
         .get('/api/refresh')
         .set(config.accessTokenHeader, `bearer ${accessToken}`)
@@ -239,38 +233,28 @@ describe('API integration tests', () => {
           expect(res).to.be.json;
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.own.property('code', 'MISSING_REFRESH_TOKEN');
-          expect(res.body).to.have.own.property('message', 'Refresh token missing');
+          expect(res.body).to.have.own.property('message', 'Refresh token\'s missing');
           expect(res.body).to.have.own.property('reqId');
           expect(res.body.reqId).to.match(uuid);
           done();
         });
     });
-
-    after((done) => {
-      Promise.all([
-          User.deleteOne({ login: 'test' }),
-          User.deleteOne({ login: 'test1' })
-        ])
-        .then(() => done());
-    });
   });
 
   describe('GET /logout', () => {
-    let accessToken = '';
-    let accessTokenBadSignature = '';
-    let accessTokenExpired = '';
+    let accessToken;
+    let accessTokenBadSignature;
+    let accessTokenExpired;
 
     before((done) => {
       accessToken = jsonwebtoken.sign({
         login: 'test',
         roles: ['USER'],
       }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
-
       accessTokenBadSignature = jsonwebtoken.sign({
         login: 'test',
         roles: ['USER'],
       }, ' ', { expiresIn: config.accessTokenExpirationTime });
-
       accessTokenExpired = jsonwebtoken.sign({
         login: 'test',
         roles: ['USER'],
@@ -286,7 +270,12 @@ describe('API integration tests', () => {
         .then(() => done());
     });
 
-    it('OK: returns no content', done => {
+    after((done) => {
+      User.deleteOne({ login: 'test' })
+        .then(() => done());
+    });
+
+    it('OK: returns no content', (done) => {
       request(app)
         .get('/api/logout')
         .set(config.accessTokenHeader, `bearer ${accessToken}`)
@@ -298,7 +287,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns a no token error', done => {
+    it('ERROR: returns a no token error', (done) => {
       request(app)
         .get('/api/logout')
         .end((err, res) => {
@@ -312,7 +301,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns an invalid token signature error', done => {
+    it('ERROR: returns an invalid token signature error', (done) => {
       request(app)
         .get('/api/logout')
         .set(config.accessTokenHeader, `bearer ${accessTokenBadSignature}`)
@@ -327,7 +316,7 @@ describe('API integration tests', () => {
         });
     });
 
-    it('ERROR: returns an expired token error', done => {
+    it('ERROR: returns an expired token error', (done) => {
       request(app)
         .get('/api/logout')
         .set(config.accessTokenHeader, `bearer ${accessTokenExpired}`)
@@ -340,11 +329,6 @@ describe('API integration tests', () => {
           expect(res.body).to.have.own.property('reqId');
           done();
         });
-    });
-
-    after((done) => {
-      User.deleteOne({ login: 'test' })
-        .then(() => done());
     });
   });
 });
