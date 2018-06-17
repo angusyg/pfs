@@ -15,7 +15,6 @@ const config = require('../config/app');
  * @class
  * @extends external:camo.Document
  * @name User
- * @param {external:Error|string} [arg] - Error to convert or string key of endpoint error
  */
 class User extends Document {
   constructor() {
@@ -68,10 +67,9 @@ class User extends Document {
    * @return {Promise<boolean>} true if candidate password match, false if not
    */
   comparePassword(candidatePassword) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       bcrypt.compare(candidatePassword, this.password)
-        .then(match => resolve(match))
-        .catch(err => reject(err));
+        .then(match => resolve(match));
     });
   }
 

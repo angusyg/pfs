@@ -23,10 +23,8 @@ const config = require('../config/logger');
  * @param  {nextMiddleware}     next - Callback to pass control to next middleware
  */
 function getStreams() {
-  const streams = [{
-    level: config.logLevel,
-    stream: fs.createWriteStream(config.logFile, { flag: 'a' }),
-  }];
+  const streams = [];
+  if (process.env.NODE_ENV === 'test') return streams;
   if (process.env.NODE_ENV === 'development') {
     streams.push({
       level: config.debugLevel,
@@ -37,6 +35,10 @@ function getStreams() {
       stream: fs.createWriteStream(config.debugFile, { flag: 'a' }),
     });
   }
+  streams.push({
+    level: config.logLevel,
+    stream: fs.createWriteStream(config.logFile, { flag: 'a' }),
+  });
   return streams;
 }
 

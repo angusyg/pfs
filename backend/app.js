@@ -14,6 +14,7 @@
  * @requires config/db
  * @requires helpers/errorhandler
  * @requires helpers/logger
+ * @requires helpers/security
  * @requires routes/api
  */
 
@@ -25,11 +26,11 @@ const pino = require('express-pino-logger');
 const uuidv4 = require('uuid/v4');
 const helmet = require('helmet');
 const cors = require('cors');
-const passport = require('./helpers/passport');
 const appConfig = require('./config/app');
 const { connect } = require('./config/db');
 const errorHandler = require('./helpers/errorhandler');
 const logger = require('./helpers/logger');
+const security = require('./helpers/security');
 const apiRouter = require('./routes/api');
 
 const app = express();
@@ -54,13 +55,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Security initialization
-app.use(passport.initialize());
+app.use(security.initialize());
 
 // Static files
-if (process.env.NODE_ENV === 'production') {
-  app.use(compression());
-  app.use(express.static(path.join(__dirname, '..', 'web')));
-}
+app.use(compression());
+app.use(express.static(path.join(__dirname, '..', 'web')));
 
 // Map modules routes
 app.use('/api', apiRouter);

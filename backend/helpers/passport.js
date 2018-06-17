@@ -6,6 +6,7 @@
  * @requires {@link external:jsonwebtoken}
  * @requires config/api
  * @requires models/users
+ * @requires models/errors
  */
 
 const passport = require('passport');
@@ -44,8 +45,7 @@ module.exports = {
       if (info instanceof Error && info.message === 'No auth token') return next(new NoJwtTokenError());
       return next(new UnauthorizedAccessError());
     }
-    if (user === false) return next(new UnauthorizedAccessError('USER_NOT_FOUND', 'No user found for login in JWT Token'));
-    if (user === null) return next(new UnauthorizedAccessError());
+    if (user === null || user === false) return next(new UnauthorizedAccessError('USER_NOT_FOUND', 'No user found for login in JWT Token'));
     req.user = user;
     return next();
   })(req, res, next),
