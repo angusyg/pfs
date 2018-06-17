@@ -37,7 +37,7 @@ describe('Module helpers/errorhandler', () => {
 
     it('errorNoRouteMapped(req: Request, res: Response, next: function): should call next with NotFoundError', (done) => {
       errorhandler.errorNoRouteMapped(req, res, next);
-      expect(next.calledOnce).to.be.false;
+      expect(next.calledOnce).to.be.true;
       expect(next.getCall(0).args[0]).to.be.instanceof(NotFoundError);
       done();
     });

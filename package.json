@@ -12,12 +12,7 @@
     "dev:front": "cross-env NODE_ENV=development gulp",
     "start": "node ./backend/bin/www",
     "build": "cross-env NODE_ENV=production gulp",
-    "postinstall": "npm run build",
-    "flow:version": "npm version --no-git-tag-version",
-    "flow:publish": "npm publish",
-    "preversion": "git checkout develop",
-    "version": "npm run test && git flow release start $npm_package_version",
-    "postversion": ""
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -58,6 +53,7 @@
     "continuation-local-storage": "^3.2.1",
     "cors": "^2.8.4",
     "cross-env": "^5.2.0",
+    "cross-var": "^1.1.0",
     "csurf": "^1.9.0",
     "express": "^4.16.3",
     "express-pino-logger": "^3.0.1",
