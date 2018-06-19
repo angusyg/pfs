@@ -15,16 +15,17 @@
 
   function Routing($stateProvider, USER_ROLES) {
     const homeState = {
-      name: 'app',
-      url: '/app',
-      templateUrl: '/partials/home.html',
-      controller: 'HomeController',
-      controllerAs: 'home',
+      name: 'app.home',
+      url: '/',
+      views: {
+        'content@': {
+          templateUrl: '/partials/home.html',
+          controller: 'HomeController',
+          controllerAs: 'home'
+        }
+      },
       data: {
-        authorizedRoles: [
-          USER_ROLES.ADMIN,
-          USER_ROLES.USER,
-        ]
+        authorizedRoles: USER_ROLES.ALL,
       },
     };
 

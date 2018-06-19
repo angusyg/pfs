@@ -7,24 +7,7 @@
 
   angular
     .module('frontend.core.init')
-    .config(Routing)
     .config(Config);
-
-  Routing.$inject = [
-    '$stateProvider',
-    'USER_ROLES',
-  ];
-
-  function Routing($stateProvider, USER_ROLES) {
-    const initState = {
-      name: 'init',
-      url: '/',
-      controller: 'InitController',
-      controllerAs: 'init'
-    };
-
-    $stateProvider.state(initState);
-  }
 
   // Configuration of providers
   Config.$inject = [
