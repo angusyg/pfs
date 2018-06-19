@@ -11,6 +11,7 @@
       REFRESH_TOKEN_HEADER: 'refresh',
     })
     .constant('USER_ROLES', {
+      ALL: 'ALL',
       ADMIN: 'ADMIN',
       USER: 'USER',
     })

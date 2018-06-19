@@ -21,9 +21,10 @@
     'AUTH_EVENTS',
     'AUTH_EVENTS_TYPE',
     'API',
+    'USER_ROLES',
   ];
 
-  function AuthService($http, store, $q, $rootScope, $transitions, $timeout, helper, SECURITY, AUTH_EVENTS, AUTH_EVENTS_TYPE, API) {
+  function AuthService($http, store, $q, $rootScope, $transitions, $timeout, helper, SECURITY, AUTH_EVENTS, AUTH_EVENTS_TYPE, API, USER_ROLES) {
     const LOGIN_ENDPOINT = `${API.URL}${API.BASE}/login`;
     const LOGOUT_ENDPOINT = `${API.URL}${API.BASE}/logout`;
     const REFRESH_ENDPOINT = `${API.URL}${API.BASE}/refresh`;
@@ -62,6 +63,7 @@
     function isAuthorized(authorizedRoles) {
       if (!SECURITY.ACTIVATED) return true;
       if (!isLoggedIn()) return false;
+      if (authorizedRoles === USER_ROLES.ALL) return true;
       if (!Array.isArray(authorizedRoles)) authorizedRoles = [authorizedRoles];
       const userRoles = helper.getUserRolesFromToken(getToken());
       return authorizedRoles.some(role => userRoles.indexOf(role) >= 0);
@@ -141,7 +143,7 @@
 
     function stateSecurization() {
       if (SECURITY.ACTIVATED) {
-        $transitions.onStart({ to: '*' }, (trans) => {
+        $transitions.onStart({ to: '**' }, (trans) => {
           const toState = trans.to();
           if (toState.data && toState.data.authorizedRoles) {
             if (!isLoggedIn()) {

@@ -1,10 +1,29 @@
 (function() {
   angular
     .module('frontend')
-    .config(Config);
+    .config(Routing);
 
-  // Configuration of providers
-  Config.$inject = [];
+  Routing.$inject = [
+    '$stateProvider',
+  ];
 
-  function Config() {}
+  function Routing($stateProvider) {
+    const appState = {
+      name: 'app',
+      abstract: true,
+      views: {
+        'navbar@': {
+          templateUrl: '/partials/navbar.html',
+          controller: 'NavbarController',
+          controllerAs: 'navbar'
+        }
+      },
+      /** App initialization => services init before to go to child states */
+      resolve: {
+        init: ['authService', (authService) => authService.initialize()],
+      }
+    };
+
+    $stateProvider.state(appState);
+  }
 }());
