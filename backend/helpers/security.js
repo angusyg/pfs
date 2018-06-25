@@ -25,7 +25,7 @@ security.requiresLogin = (req, res, next) => passport.authenticate(req, res, nex
 /**
  * Call middleware with user request roles
  * @method requiresRole
- * @param   {string[]}         roles - Array of roles to call the endpoint
+ * @param   {string[]}   roles - Array of roles to call the endpoint
  * @returns {checkRole}  Middleware to check if user has role to call endpoint
  */
 security.requiresRole = roles => (req, res, next) => {
