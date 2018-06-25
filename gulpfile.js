@@ -10,6 +10,7 @@ const jsdocConfig = require('./jsdoc.json');
 const libJs = [
   'node_modules/jquery/dist/jquery.js',
   'node_modules/angular/angular.js',
+  'node_modules/angular-resource/angular-resource.js',
   'node_modules/angular-animate/angular-animate.js',
   'node_modules/angular-messages/angular-messages.js',
   'node_modules/@uirouter/angularjs/release/angular-ui-router.js',

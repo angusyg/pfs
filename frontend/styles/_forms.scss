@@ -5,7 +5,7 @@ input[type=text], input[type=password] {
   padding: 4px;
   box-sizing: border-box;
   transition: 0.3s;
-  @include themify($themes)
+  @include themify($themes) {
     border: 1px solid themed('backgroundDarkColor');
     background-color: themed('inputBackgroundColor');
     color: themed('inputForegroundColor');
@@ -21,7 +21,6 @@ input[type=text], input[type=password] {
 
 .input-icon {
   position: relative;
-
   input[type=text], input[type=password] {
     padding-left: 32px;
 

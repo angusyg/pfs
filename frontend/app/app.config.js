@@ -25,11 +25,7 @@
         }
       },
       resolve: {
-        init: ['authService', 'userService', (authService, userService) => {
-          return authService.initialize()
-            .then(() => { console.log('DDDDDDDDDDDDDDDDDDDDDD');
-              userService.initialize() });
-        }],
+        init: ['userService', (userService) => userService.initialize()],
       }
     };
 

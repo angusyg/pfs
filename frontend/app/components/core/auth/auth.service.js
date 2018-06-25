@@ -29,13 +29,13 @@
     const LOGIN_ENDPOINT = `${API.URL}${API.BASE}/login`;
     const LOGOUT_ENDPOINT = `${API.URL}${API.BASE}/logout`;
     const REFRESH_ENDPOINT = `${API.URL}${API.BASE}/refresh`;
+    const VALIDATE_ENDPOINT = `${API.URL}${API.BASE}/validate`;
     let refreshTimerRunning = false;
 
     return {
       getToken: getToken,
       getRefreshToken: getRefreshToken,
       getUserId: getUserId,
-      getUserInfos: getUserInfos,
       getUserLogin: getUserLogin,
       getUserRoles: getUserRoles,
       initialize: initialize,
@@ -53,6 +53,12 @@
       store.remove(SECURITY.ACCESS_TOKEN_TIMESTAMP);
     }
 
+    function disconnect() {
+      cleanStore();
+      $rootScope.$broadcast(AUTH_EVENTS.NOT_AUTHENTICATED, true);
+      refreshTimerRunning = false;
+    }
+
     function getRefreshToken() {
       return store.get(SECURITY.REFRESH_TOKEN);
     }
@@ -66,7 +72,8 @@
       return payload.exp - payload.iat;
     }
 
-    function getUserId(token) {
+    function getUserId() {
+      const token = getToken();
       if (isWellformedToken(token)) return getUserInfos(token).id;
       return null;
     }
@@ -76,32 +83,42 @@
       return null;
     }
 
-    function getUserLogin(token) {
+    function getUserLogin() {
+      const token = getToken();
       if (isWellformedToken(token)) return getUserInfos(token).login;
       return null;
     }
 
-    function getUserRoles(token) {
+    function getUserRoles() {
+      const token = getToken();
       if (isWellformedToken(token)) return getUserInfos(token).roles;
       return null;
     }
 
     function initialize() {
-      return putRefreshTimer();
+      if (SECURITY.ACTIVATED) return isLoggedIn();
+      return $q.resolve();
     }
 
     function isAuthorized(authorizedRoles) {
       if (!SECURITY.ACTIVATED) return true;
-      if (!isLoggedIn()) return false;
+      if (getToken() === null) return false;
       if (authorizedRoles === USER_ROLES.ALL) return true;
       if (!Array.isArray(authorizedRoles)) authorizedRoles = [authorizedRoles];
-      const userRoles = getUserRoles(getToken());
+      const userRoles = getUserRoles();
       return authorizedRoles.some(role => userRoles.indexOf(role) >= 0);
     }
 
     function isLoggedIn() {
-      //TODO call server to validate Access Token
-      return store.get(SECURITY.ACCESS_TOKEN) !== null;
+      if (getToken() !== null) {
+        if (refreshTimerRunning) return $q.resolve()
+        else return $http.get(VALIDATE_ENDPOINT)
+          .then(() => putRefreshTimer().then(() => $q.resolve()))
+          .catch((err) => {
+            cleanStore();
+            return $q.reject();
+          });
+      } else return $q.reject();
     }
 
     function isWellformedToken(token) {
@@ -116,7 +133,7 @@
           store.set(SECURITY.ACCESS_TOKEN, response.data.accessToken);
           store.set(SECURITY.REFRESH_TOKEN, response.data.refreshToken);
           putTimer(response.data.accessToken);
-          return $q.resolve({ theme: 'DDDDD' });
+          return $q.resolve();
         })
         .catch(err => $q.reject(err));
     }
@@ -124,7 +141,7 @@
     function logout() {
       return $http.get(LOGOUT_ENDPOINT)
         .then(() => {
-          cleanStore();
+          disconnect();
           return $q.resolve();
         })
         .catch(err => $q.reject(err));
@@ -133,27 +150,14 @@
     function putRefreshTimer() {
       const defer = $q.defer();
       if (SECURITY.ACTIVATED) {
-        const token = store.get(SECURITY.ACCESS_TOKEN);
-        const refresh = store.get(SECURITY.REFRESH_TOKEN);
-        if (token && refresh) {
+        if (store.get(SECURITY.REFRESH_TOKEN)) {
           if (!refreshTimerRunning) {
             refreshToken()
-              .catch(err => {
-                cleanStore();
-                $rootScope.$broadcast(AUTH_EVENTS.NOT_AUTHENTICATED, true);
-                refreshTimerRunning = false;
-              })
+              .catch(err => disconnect())
               .finally(() => defer.resolve());
           } else defer.resolve();
-        } else {
-          refreshTimerRunning = false;
-          defer.resolve();
-        }
-      } else {
-        cleanStore();
-        refreshTimerRunning = false;
-        defer.resolve();
-      }
+        } else defer.resolve();
+      } else defer.resolve();
       return defer.promise;
     }
 
@@ -163,7 +167,7 @@
         $timeout(() => {
           refreshTimerRunning = false;
           putRefreshTimer();
-        }, Math.floor(expirationDurationMs * 0.9));
+        }, Math.floor(expirationDurationMs * 0.75));
         refreshTimerRunning = true;
       }
     }
@@ -183,21 +187,24 @@
         $transitions.onStart({ to: '**' }, (trans) => {
           const toState = trans.to();
           if (toState.data && toState.data.authorizedRoles) {
-            if (!isLoggedIn()) {
-              $rootScope.$broadcast(AUTH_EVENTS.NOT_AUTHENTICATED, {
-                type: AUTH_EVENTS_TYPE.STATE_TRANSITION,
-                data: trans,
+            return isLoggedIn()
+              .then(() => {
+                if (!isAuthorized(toState.data.authorizedRoles)) {
+                  $rootScope.$broadcast(AUTH_EVENTS.NOT_AUTHORIZED, {
+                    type: AUTH_EVENTS_TYPE.STATE_TRANSITION,
+                    data: trans,
+                  });
+                  return false;
+                } else return true;
+              })
+              .catch((err) => {
+                $rootScope.$broadcast(AUTH_EVENTS.NOT_AUTHENTICATED, {
+                  type: AUTH_EVENTS_TYPE.STATE_TRANSITION,
+                  data: trans,
+                });
+                return false;
               });
-              return false;
-            } else if (!isAuthorized(toState.data.authorizedRoles)) {
-              $rootScope.$broadcast(AUTH_EVENTS.NOT_AUTHORIZED, {
-                type: AUTH_EVENTS_TYPE.STATE_TRANSITION,
-                data: trans,
-              });
-              return false;
-            }
-            return true;
-          }
+          } else return true;
         });
       }
     }

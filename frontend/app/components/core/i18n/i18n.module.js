@@ -2,5 +2,5 @@
   'use strict';
 
   angular
-    .module('frontend.core.i18n', ['pascalprecht.translate']);
+    .module('frontend.core.i18n', []);
 })();

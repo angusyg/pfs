@@ -2,5 +2,5 @@
   'use strict';
 
   angular
-    .module('frontend.core.logging', ['frontend.core.constants']);
+    .module('frontend.core.logging', []);
 }());

@@ -8,7 +8,7 @@
   angular
     .module('frontend.core.constants')
     .constant('API', {
-      URL: 'http://localhost:3000',
+      URL: 'http://localhost:3000', //TODO Change host to real value
       BASE: '/api',
     })
     .constant('APP', {

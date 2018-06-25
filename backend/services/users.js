@@ -28,6 +28,7 @@ const service = {};
 function generateAccessToken(user) {
   logger.debug(`Generating access token for user with login '${user.login}'`);
   return jwt.sign({
+    id: user._id,
     login: user.login,
     roles: user.roles,
   }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
@@ -54,6 +55,7 @@ service.login = infos => new Promise((resolve, reject) => {
                 .then(u => resolve({
                   refreshToken: u.refreshToken,
                   accessToken: generateAccessToken(user),
+                  settings: u.settings,
                 }));
             }
           });

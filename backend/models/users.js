@@ -6,9 +6,26 @@
  * @requires config/app
  */
 
-const { Document } = require('camo');
+const { Document, EmbeddedDocument } = require('camo');
 const bcrypt = require('bcrypt');
 const config = require('../config/app');
+
+/**
+ * Creates a user settings
+ * @class
+ * @extends external:camo.EmbeddedDocument
+ * @name Settings
+ */
+class Settings extends EmbeddedDocument {
+  constructor() {
+    super();
+
+    this.theme = {
+      type: String,
+      default: 'theme-default',
+    };
+  }
+}
 
 /**
  * Creates a User
@@ -57,6 +74,11 @@ class User extends Document {
     this.refreshToken = {
       type: String,
       default: '',
+    };
+
+    this.settings = {
+      type: Settings,
+      default: Settings.create(),
     };
   }
 

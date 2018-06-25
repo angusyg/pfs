@@ -11,21 +11,24 @@
   AppController.$inject = [
     '$scope',
     'userService',
-    'authService',
   ];
 
-  function AppController($scope, userService, authService) {
+  function AppController($scope, userService) {
     const vm = this;
 
     /** variables */
-    vm.theme = userService.getTheme();
+    vm.theme = '';
 
     /** functions */
-    vm.toto = () => userService.setTheme('theme-dark');
 
     $scope.$watch(userService.getTheme, (newValue, oldValue) => {
       if (newValue !== oldValue) vm.theme = newValue;
     });
 
+    function init() {
+      vm.theme = userService.getTheme();
+    }
+
+    init();
   }
 }());
