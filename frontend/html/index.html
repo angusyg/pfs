@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html ng-app="frontend">
+<html ng-app="frontend" ng-controller="AppController as app">
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello World frontend application</title>
+  <title>Nean stack application</title><!-- TODO Change APP title -->
   <link rel="icon" href="images/favicon.ico" />
+  <link rel="stylesheet" href="https://maxcdn.icons8.com/fonts/line-awesome/1.1/css/line-awesome-font-awesome.min.css">
   <link rel="stylesheet" href="stylesheets/style.css">
 </head>
 
-<body class="">
+<body class="{{app.theme}}">
   <auth-dialog></auth-dialog>
   <permission-dialog></permission-dialog>
-  <header></header>
   <div ui-view="navbar"></div>
-  <div ui-view="content"></div>
+  <div ui-view="content" id="content"></div>
   <div ui-view="footer"></div>
-  <footer></footer>
   <!-- build:js -->
   <script src="js/jquery.js"></script>
   <script src="js/angular.js"></script>
