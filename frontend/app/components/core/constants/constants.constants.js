@@ -11,6 +11,9 @@
       URL: 'http://localhost:3000',
       BASE: '/api',
     })
+    .constant('APP', {
+      DEFAULT_THEME: 'theme-default',
+    })
     .constant('HTTP_STATUS_CODE', {
       OK: 200,
       ACCEPTED: 202,

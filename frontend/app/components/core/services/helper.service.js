@@ -9,40 +9,13 @@
     .module('frontend.core.services')
     .factory('helper', HelperService);
 
-  HelperService.$inject = ['base64'];
+  HelperService.$inject = [];
 
-  function HelperService(base64) {
+  function HelperService() {
     return {
-      getUserIdFromToken: getUserIdFromToken,
-      getUserInfosFromToken: getUserInfosFromToken,
-      getUserLoginFromToken: getUserLoginFromToken,
-      getUserRolesFromToken: getUserRolesFromToken,
-      getTokenExpirationDuration: getTokenExpirationDuration,
       isBlank: isBlank,
       isNotBlank: isNotBlank,
     };
-
-    function getUserIdFromToken(token) {
-      return getUserInfosFromToken(token).id;
-    }
-
-    function getUserInfosFromToken(token) {
-      let encoded = token.split('.')[1];
-      return JSON.parse(base64.urlDecodeBase64(encoded));
-    }
-
-    function getUserLoginFromToken(token) {
-      return getUserInfosFromToken(token).login;
-    }
-
-    function getUserRolesFromToken(token) {
-      return getUserInfosFromToken(token).roles;
-    }
-
-    function getTokenExpirationDuration(token) {
-      let payload = getUserInfosFromToken(token);
-      return payload.exp - payload.iat;
-    }
 
     function isBlank(obj) {
       return typeof obj === 'undefined' ||
