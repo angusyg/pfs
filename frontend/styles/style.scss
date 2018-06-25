@@ -1,3 +1,14 @@
+@import 'vars';
 @import 'node_modules/bootstrap/scss/bootstrap';
-@import 'core';
+@import 'animations';
+@import 'forms';
+@import 'functions';
+@import 'mixins';
+@import 'modals';
+@import 'navbar';
+@import 'themes';
 @import 'tooltip';
+
+#content {
+  margin-top: 25px;
+}
