@@ -7,6 +7,7 @@
  * @requires config/api
  * @requires models/users
  * @requires models/errors
+ * @requires helpers/logger
  */
 
 const passport = require('passport');
@@ -15,12 +16,10 @@ const { JsonWebTokenError, TokenExpiredError } = require('jsonwebtoken');
 const config = require('../config/api');
 const User = require('../models/users');
 const { UnauthorizedAccessError, JwtTokenExpiredError, NoJwtTokenError, JwtTokenSignatureError } = require('../models/errors');
+const logger = require('../helpers/logger');
 
-/**
- * JWT strategy authentication
- * @private
- */
-const jwtStrategy = new Strategy({
+// Registers JWT strategy authentication
+passport.use(new Strategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: config.tokenSecretKey,
 }, (jwtPayload, cb) => {
@@ -30,14 +29,16 @@ const jwtStrategy = new Strategy({
       return cb(null, user);
     })
     .catch(err => cb(err));
-});
-
-// Registers strategy
-passport.use(jwtStrategy);
+}));
 
 module.exports = {
-  initialize: () => passport.initialize(),
+  initialize: () => {
+    const init = passport.initialize();
+    logger.info('Passport initialized');
+    return init;
+  },
   authenticate: (req, res, next) => passport.authenticate('jwt', { session: false }, (err, user, info) => {
+    logger.debug(`Passport authentication done: - err = '${err}' - info = '${info}' - user = '${user}'`);
     if (err) return next(err);
     if (info) {
       if (info instanceof TokenExpiredError) return next(new JwtTokenExpiredError());

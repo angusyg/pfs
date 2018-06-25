@@ -56,4 +56,12 @@ controller.refreshToken = (req, res, next) => {
     .catch(err => next(err));
 };
 
+/**
+ * JWT Token validation endpoint handler
+ * @method validateToken
+ * @param  {external:Request}  req - Request received
+ * @param  {external:Response} res - Response to send
+ */
+controller.validateToken = (req, res) => res.status(204).end();
+
 module.exports = controller;

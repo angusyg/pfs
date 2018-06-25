@@ -60,11 +60,15 @@
 
     function ModalController($uibModalInstance, authService, $timeout, PARAMETERS, HTTP_STATUS_CODE) {
       const vm = this;
+
+      /** variables */
       vm.user = {
         login: '',
         password: '',
       };
       vm.error = null;
+
+      /** functions */
       vm.login = login;
 
       function login() {
@@ -112,6 +116,8 @@
 
     function ModalPermController($uibModalInstance) {
       const vm = this;
+
+      /** functions */
       vm.exit = exit;
 
       function exit() {

@@ -1,0 +1,18 @@
+.subnavbar {
+  @extend .navbar;
+  height: 2.5em;
+
+  .navbar-brand {
+    margin: 0;
+    @include navigation;
+  }
+
+  .nav-item {
+    .nav-link {
+      @include navigation;
+    }
+  }
+  @include themify($themes) {
+    background-color: themed('backgroundColor');
+  }
+}

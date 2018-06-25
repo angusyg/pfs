@@ -7,8 +7,6 @@
 
 const kindOf = require('kind-of');
 const http = require('http');
-
-const ns = 'models:errors';
 const logger = require('../helpers/logger');
 
 /**
@@ -59,6 +57,8 @@ class ApiError extends Error {
       if (type === 'string') this.message = args[1];
       else throw new TypeError(`Invalid type '${type}' for new ApiError second argument`);
     }
+
+    logger.error(`ApiError created: ${JSON.stringify(this)}`);
   }
 
   /**
@@ -87,12 +87,12 @@ class ApiError extends Error {
       reqId: req.id,
     };
     res.status(this.statusCode).json(err);
-    logger.error(`${ns}:send: sending error : ${JSON.stringify(err)}`);
+    logger.error(`ApiError:send: sending error : ${JSON.stringify(err)}`);
   }
 }
 
 /**
- * Url not found error class module to create and convert error to json response
+ * Creates a new NotFoundError
  * @class
  * @extends {ApiError}
  */
@@ -114,11 +114,13 @@ class NotFoundError extends ApiError {
      * @member {number}
      */
     this.statusCode = 404;
+
+    logger.error(`NotFoundError created: ${JSON.stringify(this)}`);
   }
 }
 
 /**
- * Creates an UnauthorizedAccessError
+ * Creates a new UnauthorizedAccessError
  * @class
  * @extends {ApiError}
  */
@@ -142,11 +144,13 @@ class UnauthorizedAccessError extends ApiError {
      * @member {number}
      */
     this.statusCode = 401;
+
+    logger.error(`UnauthorizedAccessError created: ${JSON.stringify(this)}`);
   }
 }
 
 /**
- * Creates an ForbiddenOperationError
+ * Creates a new ForbiddenOperationError
  * @class
  * @extends {ApiError}
  */
@@ -168,11 +172,13 @@ class ForbiddenOperationError extends ApiError {
      * @member {number}
      */
     this.statusCode = 403;
+
+    logger.error(`ForbiddenOperationError created: ${JSON.stringify(this)}`);
   }
 }
 
 /**
- * Creates an JwtTokenExpiredError
+ * Creates a new JwtTokenExpiredError
  * @class
  * @extends {ApiError}
  */
@@ -194,11 +200,13 @@ class JwtTokenExpiredError extends ApiError {
      * @member {number}
      */
     this.statusCode = 401;
+
+    logger.error(`JwtTokenExpiredError created: ${JSON.stringify(this)}`);
   }
 }
 
 /**
- * Creates an NoJwtTokenError
+ * Creates a new NoJwtTokenError
  * @class
  * @extends {ApiError}
  */
@@ -220,11 +228,13 @@ class NoJwtTokenError extends ApiError {
      * @member {number}
      */
     this.statusCode = 401;
+
+    logger.error(`NoJwtTokenError created: ${JSON.stringify(this)}`);
   }
 }
 
 /**
- * Creates an JwtTokenSignatureError
+ * Creates a new JwtTokenSignatureError
  * @class
  * @extends {ApiError}
  */
@@ -246,6 +256,37 @@ class JwtTokenSignatureError extends ApiError {
      * @member {number}
      */
     this.statusCode = 401;
+
+    logger.error(`JwtTokenSignatureError created: ${JSON.stringify(this)}`);
+  }
+}
+
+
+/**
+ * Creates a new NotFoundResourceError
+ * @class
+ * @extends {ApiError}
+ */
+class NotFoundResourceError extends ApiError {
+  constructor(id) {
+    super('RESOURCE_NOT_FOUND', `No resource found with id '${id}'`);
+
+    /**
+     * Name of the error
+     * @default NotFoundResourceError
+     * @member {string}
+     */
+    this.name = this.constructor.name;
+    Error.captureStackTrace(this, this.constructor);
+
+    /**
+     * HTTP status code of the response to be send
+     * @default 404
+     * @member {number}
+     */
+    this.statusCode = 404;
+
+    logger.error(`NotFoundResourceError created: ${JSON.stringify(this)}`);
   }
 }
 
@@ -257,4 +298,5 @@ module.exports = {
   JwtTokenExpiredError,
   NoJwtTokenError,
   JwtTokenSignatureError,
+  NotFoundResourceError,
 };

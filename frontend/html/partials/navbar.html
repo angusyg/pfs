@@ -1,3 +1,23 @@
-<div translate>
-  HELLO_WORLD
-</div>
+<nav class="subnavbar navbar-expand-md">
+  <div class="container">
+    <a class="navbar-brand" ui-sref="app.home"><i class="fa fa-home fa-lg fa-fw"></i></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" ui-sref="app.home" ui-sref-active="active">{{'NAVBAR_HOME' | translate | uppercase}}</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" ui-sref="app.home" ui-sref-active="active">{{'NAVBAR_ADMIN' | translate | uppercase}}</a><!-- TODO Change ui-sref for admin -->
+        </li>
+        <li class="nav-item">
+          <a class="nav-link no-focus"><i class="fa fa-cog fa-lg fa-fw"></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

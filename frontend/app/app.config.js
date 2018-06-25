@@ -1,7 +1,13 @@
 (function() {
   angular
     .module('frontend')
-    .config(Routing);
+    .config(Routing)
+    .config(Config);
+
+  // Configuration of providers
+  Config.$inject = [];
+
+  function Config() {}
 
   Routing.$inject = [
     '$stateProvider',
@@ -18,9 +24,8 @@
           controllerAs: 'navbar'
         }
       },
-      /** App initialization => services init before to go to child states */
       resolve: {
-        init: ['authService', (authService) => authService.initialize()],
+        init: ['userService', (userService) => userService.initialize()],
       }
     };
 
