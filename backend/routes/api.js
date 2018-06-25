@@ -9,7 +9,7 @@
  */
 
 const express = require('express');
-const { loginPath, logoutPath, loggerPath, refreshPath, roles } = require('../config/api');
+const { loginPath, logoutPath, loggerPath, refreshPath, validateTokenPath, roles } = require('../config/api');
 const apiController = require('../controllers/api');
 const { requiresLogin } = require('../helpers/security');
 const resources = require('../helpers/resources');
@@ -65,6 +65,16 @@ router.get(logoutPath, requiresLogin, apiController.logout);
  * @name refresh
  */
 router.get(refreshPath, requiresLogin, apiController.refreshToken);
+
+/**
+ * @path {GET} /validate
+ * @auth This route requires JWT bearer Authentication. If authentication fails it will return a 401 error.
+ * @header {string} authorization - Header supporting JWT Token
+ * @code {204} if successful
+ * @code {401} if JWT is invalid
+ * @name validate
+ */
+router.get(validateTokenPath, requiresLogin, apiController.validateToken);
 
 /** User resource */
 router.use('/users', resources.addResource('users', User, {

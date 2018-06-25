@@ -327,5 +327,101 @@ module.exports = (app, config) => {
           });
       });
     });
+
+    describe('GET /validate', () => {
+      let accessToken;
+      let accessTokenBadSignature;
+      let accessTokenExpired;
+
+      before((done) => {
+        app.get('db')
+          .dropDatabase()
+          .then(() => {
+            accessToken = jsonwebtoken.sign({
+              login: 'test',
+              roles: ['USER'],
+            }, config.tokenSecretKey, { expiresIn: config.accessTokenExpirationTime });
+            accessTokenBadSignature = jsonwebtoken.sign({
+              login: 'test',
+              roles: ['USER'],
+            }, ' ', { expiresIn: config.accessTokenExpirationTime });
+            accessTokenExpired = jsonwebtoken.sign({
+              login: 'test',
+              roles: ['USER'],
+            }, config.tokenSecretKey, { expiresIn: 0 });
+
+            User.create({
+                login: 'test',
+                password: 'test',
+                roles: ['USER'],
+                refreshToken: '',
+              })
+              .save()
+              .then(() => done());
+          });
+      });
+
+      after((done) => {
+        app.get('db')
+          .dropDatabase()
+          .then(() => done());
+      });
+
+      it('OK: returns no content', (done) => {
+        request(app)
+          .get('/api/validate')
+          .set(config.accessTokenHeader, `bearer ${accessToken}`)
+          .end((err, res) => {
+            expect(res.statusCode).to.equal(204);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.be.empty;
+            done();
+          });
+      });
+
+      it('ERROR: returns a no token error', (done) => {
+        request(app)
+          .get('/api/validate')
+          .end((err, res) => {
+            expect(res.statusCode).to.equal(401);
+            expect(res).to.be.json;
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.own.property('code', 'NO_TOKEN_FOUND');
+            expect(res.body).to.have.own.property('message', 'No Jwt token found in authorization header');
+            expect(res.body).to.have.own.property('reqId');
+            done();
+          });
+      });
+
+      it('ERROR: returns an invalid token signature error', (done) => {
+        request(app)
+          .get('/api/validate')
+          .set(config.accessTokenHeader, `bearer ${accessTokenBadSignature}`)
+          .end((err, res) => {
+            expect(res.statusCode).to.equal(401);
+            expect(res).to.be.json;
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.own.property('code', 'INVALID_TOKEN_SIGNATURE');
+            expect(res.body).to.have.own.property('message', 'Jwt token signature is invalid');
+            expect(res.body).to.have.own.property('reqId');
+            done();
+          });
+      });
+
+      it('ERROR: returns an expired token error', (done) => {
+        request(app)
+          .get('/api/validate')
+          .set(config.accessTokenHeader, `bearer ${accessTokenExpired}`)
+          .end((err, res) => {
+            expect(res.statusCode).to.equal(401);
+            expect(res).to.be.json;
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.own.property('code', 'TOKEN_EXPIRED');
+            expect(res.body).to.have.own.property('message', 'Jwt token has expired');
+            expect(res.body).to.have.own.property('reqId');
+            done();
+          });
+      });
+    });
   });
 };
