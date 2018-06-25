@@ -15,6 +15,7 @@
  * @requires helpers/errorhandler
  * @requires helpers/logger
  * @requires helpers/security
+ * @requires helpers/resources
  * @requires routes/api
  */
 
@@ -44,7 +45,7 @@ app.use(pino({
 }));
 
 // Connection to db
-connect();
+connect().then(db => app.set('db', db));
 
 // Security middlewares
 app.use(helmet());
