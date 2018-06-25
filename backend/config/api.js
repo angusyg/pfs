@@ -70,6 +70,15 @@ const api = {
    * @default /log/:level
    */
   loggerPath: '/log/:level',
+
+  /**
+   * User possible roles
+   * @type {Object}
+   */
+  roles: {
+    ADMIN: 'ADMIN',
+    USER: 'USER',
+  },
 };
 
 module.exports = api;
