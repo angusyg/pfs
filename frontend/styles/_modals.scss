@@ -1,0 +1,31 @@
+.modal-header {
+  border: 0;
+  @include themify($themes) {
+    color: themed('foregroundDarkColor');
+  }
+
+  img {
+    width: 100px;
+
+    &.mid {
+      width: 48px;
+    }
+  }
+}
+
+.modal-content {
+  border: 0;
+  @include themify($themes) {
+    background-color: themed('backgroundDarkColor');
+    color: themed('foregroundDarkColor');
+  }
+}
+
+.modal-footer {
+  border: 0;
+  padding: 0;
+
+  .btn {
+    margin-bottom: 20px;
+  }
+}

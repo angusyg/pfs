@@ -20,13 +20,14 @@ if (dbFolder !== 'memory' && !fs.existsSync(dbFolder)) fs.mkdirSync(dbFolder);
  * Connect app to NeDB database
  * @function connect
  */
-const connect = () => {
-  camo.connect(`nedb://${dbFolder}`)
-    .then(() => logger.info(`Connection opened to DB 'nedb://${dbFolder}'`))
-    .catch((err) => {
-      logger.fatal(`Error during DB connection : ${JSON.stringify(err)}`);
-      process.exit(0);
-    });
-};
+const connect = () => camo.connect(`nedb://${dbFolder}`)
+  .then((db) => {
+    logger.info(`Connection opened to DB 'nedb://${dbFolder}'`);
+    return db;
+  })
+  .catch((err) => {
+    logger.fatal(`Error during DB connection : ${JSON.stringify(err)}`);
+    process.exit(0);
+  });
 
 module.exports = { connect };

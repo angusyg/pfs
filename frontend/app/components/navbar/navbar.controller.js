@@ -12,5 +12,10 @@
 
   function NavbarController() {
     const vm = this;
+
+    /** variables */
+
+    /** functions */
+
   }
 }());

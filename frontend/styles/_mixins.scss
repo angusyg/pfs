@@ -1,0 +1,36 @@
+@mixin themify($themes: $themes) {
+  @each $theme, $map in $themes {
+    .theme-#{$theme} & {
+      $theme-map: ()
+      !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge($theme-map, ($key: $value)) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@mixin navigation {
+  padding-right: 0.75em;
+  padding-left: 0.75em;
+  @include themify($themes) {
+    color: themed('foregroundColor');
+  }
+
+  &:hover {
+    @include themify($themes) {
+      color: themed('foregroundLightColor');
+      background-color: themed('backgroundLightColor');
+    }
+  }
+
+  &.active {
+    @include themify($themes) {
+      color: themed('foregroundDarkColor');
+      background-color: themed('backgroundDarkColor');
+    }
+  }
+}

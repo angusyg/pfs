@@ -9,7 +9,9 @@
     .module('frontend.core.services')
     .factory('Exception', ExceptionService);
 
-  ExceptionService.$inject = ['$log'];
+  ExceptionService.$inject = [
+    '$log',
+  ];
 
   function ExceptionService($log) {
     const ConfigException = class ConfigException extends Error {

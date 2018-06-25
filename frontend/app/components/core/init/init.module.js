@@ -2,7 +2,5 @@
   'use strict';
 
   angular
-    .module('frontend.core.init', [
-      'ui.router',
-    ]);
+    .module('frontend.core.init', []);
 }());

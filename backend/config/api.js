@@ -70,6 +70,22 @@ const api = {
    * @default /log/:level
    */
   loggerPath: '/log/:level',
+
+  /**
+   * JWT Token validation endpoint path
+   * @type {string}
+   * @default /validate
+   */
+  validateTokenPath: '/validate',
+
+  /**
+   * User possible roles
+   * @type {Object}
+   */
+  roles: {
+    ADMIN: 'ADMIN',
+    USER: 'USER',
+  },
 };
 
 module.exports = api;

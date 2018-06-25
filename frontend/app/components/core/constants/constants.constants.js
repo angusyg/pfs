@@ -8,8 +8,11 @@
   angular
     .module('frontend.core.constants')
     .constant('API', {
-      URL: 'http://localhost:3000',
+      URL: 'http://localhost:3000', //TODO Change host to real value
       BASE: '/api',
+    })
+    .constant('APP', {
+      DEFAULT_THEME: 'theme-default',
     })
     .constant('HTTP_STATUS_CODE', {
       OK: 200,

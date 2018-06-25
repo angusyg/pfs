@@ -1,11 +1,15 @@
-@import 'vars';
+$fo-color: #ffffff;
+$error-bg-color: #be4b49;
+$success-bg-color: #00c533;
+$shadow-color: #0000002E;
 
 .tooltip {
   width: 70%;
 
   .tooltip-inner {
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px $shadow-color;
   }
+
   @each $type, $bg-color in (fe-error: $error-bg-color, fe-success: $success-bg-color) {
     &.#{$type} {
       .tooltip-inner {

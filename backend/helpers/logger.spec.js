@@ -1,4 +1,4 @@
-/* eslint no-unused-expressions: 0, global-require: 0 */
+/* eslint global-require: 0 */
 
 const chai = require('chai');
 let logger = require('./logger');

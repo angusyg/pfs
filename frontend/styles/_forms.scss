@@ -1,0 +1,44 @@
+input[type=text], input[type=password] {
+  border-radius: 4px;
+  margin: 0;
+  outline: none;
+  padding: 4px;
+  box-sizing: border-box;
+  transition: 0.3s;
+  @include themify($themes) {
+    border: 1px solid themed('backgroundDarkColor');
+    background-color: themed('inputBackgroundColor');
+    color: themed('inputForegroundColor');
+  }
+
+  &:focus {
+    @include themify($themes) {
+      border: 1px solid themed('backgroundDarkColor');
+      background-color: themed('inputBackgroundColor');
+    }
+  }
+}
+
+.input-icon {
+  position: relative;
+  input[type=text], input[type=password] {
+    padding-left: 32px;
+
+    &:focus + i {
+      @include themify($themes) {
+        color: themed('primaryColor');
+      }
+    }
+  }
+
+  i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 9px 8px;
+    transition: 0.3s;
+    @include themify($themes) {
+      color: themed('secondaryColor');
+    }
+  }
+}

@@ -2,22 +2,25 @@
  * @fileoverview App API router
  * @module routes/api
  * @requires {@link external:express}
- * @requires helpers/security
  * @requires config/api
  * @requires controllers/api
+ * @requires helpers/security
+ * @requires helpers/resources
  */
 
 const express = require('express');
-const { requiresLogin } = require('../helpers/security');
-const { loginPath, logoutPath, loggerPath, refreshPath } = require('../config/api');
+const { loginPath, logoutPath, loggerPath, refreshPath, validateTokenPath, roles } = require('../config/api');
 const apiController = require('../controllers/api');
+const { requiresLogin } = require('../helpers/security');
+const resources = require('../helpers/resources');
+const User = require('../models/users');
 
 const router = express.Router();
 
 /**
  * @path {POST} /log/:level
  * @params {string} :level      - level of the log to save
- * @body {json} log
+ * @body {Object} log
  * @body {string} log.url       - current page url of log
  * @body {string} log.message   - message to log
  * @code {204} if successful, no content
@@ -27,7 +30,7 @@ router.post(loggerPath, apiController.logger);
 
 /**
  * @path {POST} /login
- * @body {json} infos
+ * @body {Object} infos
  * @body {string} infos.login     - user login
  * @body {string} infos.password  - user password
  * @response {json} tokens
@@ -42,6 +45,7 @@ router.post(loginPath, apiController.login);
 
 /**
  * @path {GET} /logout
+ * @auth This route requires JWT bearer Authentication. If authentication fails it will return a 401 error.
  * @header {string} authorization - Header supporting JWT Token
  * @code {204} if successful, no content
  * @code {401} if login is not valid
@@ -51,6 +55,7 @@ router.get(logoutPath, requiresLogin, apiController.logout);
 
 /**
  * @path {GET} /refresh
+ * @auth This route requires JWT bearer Authentication. If authentication fails it will return a 401 error.
  * @header {string} authorization - Header supporting JWT Token
  * @header {string} refresh       - Header supporting refresh token
  * @code {200} if successful
@@ -60,5 +65,30 @@ router.get(logoutPath, requiresLogin, apiController.logout);
  * @name refresh
  */
 router.get(refreshPath, requiresLogin, apiController.refreshToken);
+
+/**
+ * @path {GET} /validate
+ * @auth This route requires JWT bearer Authentication. If authentication fails it will return a 401 error.
+ * @header {string} authorization - Header supporting JWT Token
+ * @code {204} if successful
+ * @code {401} if JWT is invalid
+ * @name validate
+ */
+router.get(validateTokenPath, requiresLogin, apiController.validateToken);
+
+/** User resource */
+router.use('/users', resources.addResource('users', User, {
+  global: {
+    protected: true,
+    roles: [
+      roles.ADMIN,
+      roles.USER,
+    ],
+  },
+  filter: [
+    'password',
+    'refreshToken',
+  ],
+}).router);
 
 module.exports = router;

@@ -4,5 +4,6 @@
       'frontend.core',
       'frontend.navbar',
       'frontend.home',
+      'frontend.resources',
     ]);
 }());
