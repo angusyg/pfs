@@ -94,3 +94,5 @@ function gracefulShutdown() {
 // Catches signals to gracefull quit
 process.on('SIGTERM', gracefulShutdown);
 process.on('SIGINT', gracefulShutdown);
+
+module.exports = server;
