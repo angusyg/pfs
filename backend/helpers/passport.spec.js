@@ -1,5 +1,3 @@
-/* eslint no-unused-expressions: 0 */
-
 const chai = require('chai');
 const sinon = require('sinon');
 const camo = require('camo');
