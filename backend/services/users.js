@@ -6,6 +6,7 @@
  * @requires config/api
  * @requires models/users
  * @requires models/errors
+ * @requires helpers/logger
  */
 
 const uuidv4 = require('uuid/v4');
@@ -13,6 +14,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/api');
 const User = require('../models/users');
 const { ApiError, UnauthorizedAccessError } = require('../models/errors');
+const logger = require('../helpers/logger');
 
 const service = {};
 
@@ -24,6 +26,7 @@ const service = {};
  * @returns {string} JWT access token
  */
 function generateAccessToken(user) {
+  logger.debug(`Generating access token for user with login '${user.login}'`);
   return jwt.sign({
     login: user.login,
     roles: user.roles,
@@ -37,6 +40,7 @@ function generateAccessToken(user) {
  * @returns {Promise<Object>} access and refresh tokens
  */
 service.login = infos => new Promise((resolve, reject) => {
+  logger.debug(`Trying to log in user with login '${infos.login}'`);
   User.findOne({ login: infos.login })
     .then((user) => {
       if (!user) reject(new UnauthorizedAccessError('BAD_LOGIN', 'Bad login'));
@@ -45,6 +49,7 @@ service.login = infos => new Promise((resolve, reject) => {
           .then((match) => {
             if (!match) reject(new UnauthorizedAccessError('BAD_PASSWORD', 'Bad password'));
             else {
+              logger.debug(`Creating new refresh token for user with login '${user.login}'`);
               User.findOneAndUpdate({ _id: user._id }, { refreshToken: uuidv4() })
                 .then(u => resolve({
                   refreshToken: u.refreshToken,
@@ -65,6 +70,7 @@ service.login = infos => new Promise((resolve, reject) => {
  */
 service.refreshToken = (user, refreshToken) => new Promise((resolve, reject) => {
   if (refreshToken) {
+    logger.debug(`Trying to refresh access token for user with login '${user.login}'`);
     User.findOne({ login: user.login })
       .then((u) => {
         if (u) {
