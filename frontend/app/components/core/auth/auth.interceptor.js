@@ -1,6 +1,8 @@
 /**
- * Frontend client application auth module;
- * Interceptor to inject if needed JWTToken on secured calls
+ * @ngdoc factory
+ * @name authInterceptor
+ * @memberof frontend.core.auth
+ * @description Http interceptor to inject if needed JWT token on API server calls
  */
 (function() {
   'use strict';
@@ -9,6 +11,10 @@
     .module('frontend.core.auth')
     .factory('authInterceptor', AuthInterceptor);
 
+  /**
+   * Dependency injection
+   * @type string[]
+   */
   AuthInterceptor.$inject = [
     '$q',
     '$injector',
@@ -20,6 +26,12 @@
       responseError: responseError,
     };
 
+    /**
+     * Adds authentication headers on http calls to API server
+     * @memberof authInterceptor
+     * @param {Object} config - http call config
+     * @returns {Object} http call config with authentication headers if needed
+     */
     function request(config) {
       const API = $injector.get('API');
       if (config.url.indexOf(`${API.URL}${API.BASE}`) > -1) {
@@ -31,6 +43,12 @@
       return config;
     }
 
+    /**
+     * Broadcasts API http authentication errors
+     * @memberof authInterceptor
+     * @param {Object} err - http error
+     * @returns {Promise.rejected} err as rejected promise
+     */
     function responseError(err) {
       if (err.status === $injector.get('HTTP_STATUS_CODE').UNAUTHORIZED) $injector.get('$rootScope').$broadcast($injector.get('AUTH_EVENTS').NOT_AUTHENTICATED, err.config);
       return $q.reject(err);

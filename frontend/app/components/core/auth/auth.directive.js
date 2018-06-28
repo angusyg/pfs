@@ -1,6 +1,11 @@
 /**
- * Frontend client application auth module;
- * Directive to show login modal on authentication error event
+ * @ngdoc directive
+ * @name auth-dialog
+ * @param $state {service} convert html attribute to Google map api options
+ * @param $uibModal {service} AngularJS $compile service
+ * @param $templateCache {service} AngularJS $compile service
+ * @param AUTH_EVENTS {service} AngularJS $compile service
+ * @param AUTH_EVENTS_TYPE {service} AngularJS $compile service
  */
 (function() {
   'use strict';

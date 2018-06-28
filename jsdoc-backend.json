@@ -3,9 +3,12 @@
     "allowUnknownTags": true
   },
   "opts": {
-    "destination": "./docs"
+    "destination": "./docs/backend"
   },
-  "plugins": ["plugins/markdown", "jsdoc-http-plugin"],
+  "plugins": [
+    "plugins/markdown",
+    "jsdoc-http-plugin"
+   ],
   "templates": {
     "cleverLinks": false,
     "monospaceLinks": false,

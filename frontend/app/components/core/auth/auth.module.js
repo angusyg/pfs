@@ -1,5 +1,8 @@
 /**
- * Frontend client application auth module
+ * @ngdoc module
+ * @name frontend.core.auth
+ * @memberof frontend.core
+ * @description Core authentication module
  */
 (function() {
   'use strict';
