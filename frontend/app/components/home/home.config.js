@@ -1,22 +1,20 @@
 /**
- * @fileoverview Home module config
+ * @ngdoc config
+ * @name HomeConfig
+ * @memberof frontend.home
+ * @param {service} $translatePartialLoaderProvider - $translatePartialLoader service provider
+ * @description  Home component config. Adds home part to translate loader.
  */
 (function() {
   'use strict';
 
   angular
     .module('frontend.home')
-    .config(Config);
+    .config(HomeConfig);
 
-  Config.$inject = [
-    '$translateProvider',
-    '$translatePartialLoaderProvider',
-    'TRANSLATE',
-  ];
+  HomeConfig.$inject = ['$translatePartialLoaderProvider'];
 
-  function Config($translateProvider, $translatePartialLoaderProvider, TRANSLATE) {
-    $translateProvider.translations('fr', TRANSLATE.FR);
-    $translateProvider.translations('en', TRANSLATE.EN);
+  function HomeConfig($translatePartialLoaderProvider) {
     $translatePartialLoaderProvider.addPart('home');
   }
 })();

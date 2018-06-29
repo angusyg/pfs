@@ -56,7 +56,7 @@ module.exports = (app, config) => {
           .post('/api/login')
           .send({
             login: 'test',
-            password: 'test'
+            password: 'test',
           })
           .end(async (err, res) => {
             expect(res.statusCode).to.equal(200);
@@ -68,8 +68,8 @@ module.exports = (app, config) => {
             try {
               await jwtVerify(res.body.accessToken, config.tokenSecretKey);
               done();
-            } catch (err) {
-              done(err);
+            } catch (error) {
+              done(error);
             }
           });
       });
@@ -79,7 +79,7 @@ module.exports = (app, config) => {
           .post('/api/login')
           .send({
             login: 'test1',
-            password: 'test'
+            password: 'test',
           })
           .end((err, res) => {
             expect(res.statusCode).to.equal(401);
@@ -98,7 +98,7 @@ module.exports = (app, config) => {
           .post('/api/login')
           .send({
             login: 'test',
-            password: 'test1'
+            password: 'test1',
           })
           .end((err, res) => {
             expect(res.statusCode).to.equal(401);
@@ -151,7 +151,7 @@ module.exports = (app, config) => {
                 roles: ['USER'],
                 refreshToken: '',
               })
-              .save()
+              .save(),
             ]).then(() => done());
           });
       });
@@ -175,8 +175,8 @@ module.exports = (app, config) => {
             try {
               await jwtVerify(res.body.accessToken, config.tokenSecretKey);
               done();
-            } catch (err) {
-              done(err);
+            } catch (error) {
+              done(error);
             }
           });
       });

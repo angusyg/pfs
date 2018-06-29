@@ -5,7 +5,8 @@ const plugins = require('gulp-load-plugins')();
 const gutil = require('gulp-util');
 const uglify = require('gulp-uglify-es').default;
 const runSequence = require('run-sequence');
-const jsdocConfig = require('./jsdoc.json');
+const jsdocBackendConfig = require('./jsdoc-backend.json');
+const jsdocFrontendConfig = require('./jsdoc-frontend.json');
 
 const libJs = [
   'node_modules/jquery/dist/jquery.js',
@@ -23,6 +24,7 @@ const localJs = [
   'frontend/app/app.module.js',
   'frontend/app/**/*.module.js',
   'frontend/app/**/*.js',
+  'README.md',
 ];
 const sourceJs = libJs.concat(localJs);
 const sourceBackend = [
@@ -68,10 +70,20 @@ const pumpPromise = streams => new Promise((resolve, reject) => {
   });
 });
 
-gulp.task('doc', (cb) => {
+// Creates JSDoc of Backend
+gulp.task('jsdoc-backend', (cb) => {
   gulp.src(sourceBackend, { read: false })
-    .pipe(plugins.jsdoc3(jsdocConfig, cb));
+    .pipe(plugins.jsdoc3(jsdocBackendConfig, cb));
 });
+
+// Creates JSDoc of Frontend
+gulp.task('jsdoc-frontend', (cb) => {
+  gulp.src(localJs, { read: false })
+    .pipe(plugins.jsdoc3(jsdocFrontendConfig, cb));
+});
+
+// Creates JSDoc
+gulp.task('jsdoc', callback => runSequence('jsdoc-backend', 'jsdoc-frontend', callback));
 
 // Validates js files
 gulp.task('lint', () => pumpPromise([
@@ -97,7 +109,7 @@ gulp.task('clean-image', () => del(cleanImage));
 gulp.task('clean-i18n', () => del(cleanI18n));
 
 // Removes all static files
-gulp.task('clean', (callback) => runSequence('clean-js', 'clean-css', 'clean-html', 'clean-image', 'clean-i18n', callback));
+gulp.task('clean', callback => runSequence('clean-js', 'clean-css', 'clean-html', 'clean-image', 'clean-i18n', callback));
 
 // Creates css from sass files and reload in dev mode
 gulp.task('css', () => pumpPromise([
@@ -166,6 +178,8 @@ gulp.task('watch', () => {
     gulp.watch(sourceImage, ['image']);
     gulp.watch(sourceI18n, ['i18n']);
     gulp.watch(sourceBackend, ['doc']);
+    gulp.watch(sourceBackend, ['jsdoc-backend']);
+    gulp.watch(localJs, ['jsdoc-frontend']);
   }
 });
 

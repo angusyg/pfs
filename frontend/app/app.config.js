@@ -1,19 +1,20 @@
+/**
+ * @ngdoc config
+ * @name AppRoutingConfig
+ * @memberof frontend
+ * @param {service} $stateProvider - UI router $state service provider
+ * @description App routing configuration. Adds root state (handling services initialization)
+ */
 (function() {
   angular
     .module('frontend')
-    .config(Routing)
-    .config(Config);
+    .config(AppRoutingConfig);
 
-  // Configuration of providers
-  Config.$inject = [];
-
-  function Config() {}
-
-  Routing.$inject = [
+  AppRoutingConfig.$inject = [
     '$stateProvider',
   ];
 
-  function Routing($stateProvider) {
+  function AppRoutingConfig($stateProvider) {
     const appState = {
       name: 'app',
       abstract: true,

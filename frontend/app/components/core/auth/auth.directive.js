@@ -1,14 +1,20 @@
 /**
- * Frontend client application auth module;
- * Directive to show login modal on authentication error event
+ * @ngdoc directive
+ * @name auth-dialog
+ * @memberof frontend.core.auth
+ * @param {service} $state            - Ui router state service
+ * @param {service} $uibModal         - UI bootstrap modal service
+ * @param {service} $templateCache    - AngularJS $templateCache service
+ * @param {service} AUTH_EVENTS       - Authentication events constant
+ * @param {service} AUTH_EVENTS_TYPE  - Authentication events type constant
+ * @description Directive to show a modal when an authentication event "not authenticated" is sent
  */
 (function() {
   'use strict';
 
   angular
     .module('frontend.core.auth')
-    .directive('authDialog', AuthDialog)
-    .directive('permissionDialog', PermissionDialog);
+    .directive('authDialog', AuthDialog);
 
   AuthDialog.$inject = [
     '$state',
@@ -61,14 +67,14 @@
     function ModalController($uibModalInstance, authService, $timeout, PARAMETERS, HTTP_STATUS_CODE) {
       const vm = this;
 
-      /** variables */
+      // variables
       vm.user = {
         login: '',
         password: '',
       };
       vm.error = null;
 
-      /** functions */
+      // functions
       vm.login = login;
 
       function login() {
@@ -82,6 +88,25 @@
       }
     }
   }
+})();
+
+/**
+ * @ngdoc directive
+ * @name permission-dialog
+ * @memberof frontend.core.auth
+ * @param {service} $state            - Ui router state service
+ * @param {service} $uibModal         - UI bootstrap modal service
+ * @param {service} $templateCache    - AngularJS $templateCache service
+ * @param {service} AUTH_EVENTS       - Authentication events constant
+ * @param {service} AUTH_EVENTS_TYPE  - Authentication events type constant
+ * @description Directive to show a modal when an authentication event "not authorized" is sent
+ */
+(function() {
+  'use strict';
+
+  angular
+    .module('frontend.core.auth')
+    .directive('permissionDialog', PermissionDialog);
 
   PermissionDialog.$inject = [
     '$state',

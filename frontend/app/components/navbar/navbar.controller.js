@@ -1,5 +1,8 @@
 /**
- * @fileoverview Navbar module controller
+ * @ngdoc controller
+ * @name NavbarController
+ * @memberof frontend.navbar
+ * @description Navbar component controller
  */
 (function() {
   'use strict';
@@ -13,9 +16,9 @@
   function NavbarController() {
     const vm = this;
 
-    /** variables */
+    // variables
 
-    /** functions */
+    // functions
 
   }
 }());

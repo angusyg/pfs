@@ -1,5 +1,8 @@
 /**
- * @fileoverview Home module controller
+ * @ngdoc controller
+ * @name HomeController
+ * @memberof frontend.home
+ * @description  Home component controller
  */
 (function() {
   'use strict';
@@ -12,5 +15,10 @@
 
   function HomeController() {
     const vm = this;
+
+    // variables
+
+    // functions
+
   }
 }());
