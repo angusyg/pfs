@@ -24,8 +24,8 @@ const localJs = [
   'frontend/app/app.module.js',
   'frontend/app/**/*.module.js',
   'frontend/app/**/*.js',
-  'README.md',
 ];
+const jsDocFrontend = localJs.concat(['README.md']);
 const sourceJs = libJs.concat(localJs);
 const sourceBackend = [
   'README.md',
@@ -78,7 +78,7 @@ gulp.task('jsdoc-backend', (cb) => {
 
 // Creates JSDoc of Frontend
 gulp.task('jsdoc-frontend', (cb) => {
-  gulp.src(localJs, { read: false })
+  gulp.src(jsDocFrontend, { read: false })
     .pipe(plugins.jsdoc3(jsdocFrontendConfig, cb));
 });
 
