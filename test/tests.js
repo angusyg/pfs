@@ -1,4 +1,3 @@
-/* eslint global-require: 0 */
 process.env.DB_FOLDER = 'memory';
 process.env.TOKEN_SECRET = 'TOKEN_SECRET';
 
@@ -12,7 +11,7 @@ describe('API integration tests', () => {
 
   before((done) => {
     app.on('appStarted', () => done());
-    server = require('../backend/bin/www');
+    server = require('../backend/bin/www'); // eslint-disable-line global-require
   });
 
   after(done => server.close(() => done()));
