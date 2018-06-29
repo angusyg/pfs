@@ -2,7 +2,9 @@
  * @ngdoc factory
  * @name authInterceptor
  * @memberof frontend.core.auth
- * @description Http interceptor to inject if needed JWT token on API server calls
+ * @param {service} $q        - AngularJS promise service
+ * @param {service} $injector - AngularJS injection service
+ * @description Http interceptor to inject if needed JWT token on API server calls and handle authentication API errors
  */
 (function() {
   'use strict';
@@ -11,10 +13,6 @@
     .module('frontend.core.auth')
     .factory('authInterceptor', AuthInterceptor);
 
-  /**
-   * Dependency injection
-   * @type string[]
-   */
   AuthInterceptor.$inject = [
     '$q',
     '$injector',

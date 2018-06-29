@@ -1,5 +1,7 @@
 /**
- * @fileoverview Home page module
+ * @ngdoc module
+ * @name frontend.home
+ * @description Home module.
  */
 (function() {
   'use strict';

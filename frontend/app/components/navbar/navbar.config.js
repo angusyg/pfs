@@ -1,18 +1,20 @@
 /**
- * @fileoverview Navbar module config
+ * @ngdoc config
+ * @name NavbarController
+ * @memberof frontend.navbar
+ * @param {service} $translatePartialLoaderProvider - $translatePartialLoader service provider
+ * @description Navbar component config. Adds navbar part to translate loader.
  */
 (function() {
   'use strict';
 
   angular
     .module('frontend.navbar')
-    .config(Config);
+    .config(NavbarConfig);
 
-  Config.$inject = [
-    '$translatePartialLoaderProvider',
-  ];
+  NavbarConfig.$inject = ['$translatePartialLoaderProvider'];
 
-  function Config($translatePartialLoaderProvider) {
+  function NavbarConfig($translatePartialLoaderProvider) {
     $translatePartialLoaderProvider.addPart('navbar');
   }
 })();

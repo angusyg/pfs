@@ -1,11 +1,20 @@
 /**
- * Frontend client application auth module;
- * Service to handle authentication (login, logout, JWTToken storage and refresh)
- */
-/**
  * @ngdoc factory
  * @name authService
  * @memberof frontend.core.auth
+ * @param {service} $http             - AngularJS http service
+ * @param {service} store             - Storafe service (local or session)
+ * @param {service} $q                - AngularJS promise service
+ * @param {service} $rootScope        - AngularJS app root scope
+ * @param {service} $transitions      - UI router state transition service
+ * @param {service} $timeout          - AngularJS timeout service
+ * @param {service} helper            - Core helper
+ * @param {service} base64            - Base64 service to endoce/decode string
+ * @param {service} SECURITY          - Security app constant
+ * @param {service} AUTH_EVENTS       - Authentication events constant
+ * @param {service} AUTH_EVENTS_TYPE  - Authentication events type constant
+ * @param {service} API               - App API constant
+ * @param {service} USER_ROLES        - User roles constant
  * @description Authentication service
  */
 (function() {
@@ -15,10 +24,6 @@
     .module('frontend.core.auth')
     .factory('authService', AuthService);
 
-  /**
-   * Dependency injection
-   * @type string[]
-   */
   AuthService.$inject = [
     '$http',
     'store',
@@ -288,7 +293,7 @@
 
     /**
      * Checks before transition to an app state, if authentication and special
-     * roles are needed and if user can access to the state  
+     * roles are needed and if user can access to the state
      * @memberof authService
      * @returns {boolean} true if transition is authorized, false otherwise
      */

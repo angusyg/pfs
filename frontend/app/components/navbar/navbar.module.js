@@ -1,5 +1,7 @@
 /**
- * @fileoverview Navbar module
+ * @ngdoc module
+ * @name frontend.navbar
+ * @description Navbar module.
  */
 (function() {
   'use strict';

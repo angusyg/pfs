@@ -1,14 +1,10 @@
 /**
- * Frontend client application logging module:
- * Config
- * - Log decorator to send every client log to server
- * - Exception handler to log uncatched exceptions
- */
-
-/**
  * @ngdoc config
  * @name LogDecorator
  * @memberof frontend.core.logging
+ * @param {service} $provide    - AngularJS provider service
+ * @param {service} PARAMETERS  - App parameters constant
+ * @param {service} API         - App api constant
  * @description Logger decorator to send client log to server
  */
 (function() {
@@ -18,10 +14,6 @@
     .module('frontend.core.logging')
     .config(LogDecorator);
 
-  /**
-   * Dependency injection
-   * @type string[]
-   */
   LogDecorator.$inject = [
     '$provide',
     'PARAMETERS',
@@ -70,6 +62,7 @@
  * @ngdoc config
  * @name ExceptionHandlerDecorator
  * @memberof frontend.core.logging
+ * @param {service} $provide    - AngularJS provider service
  * @description Exception handler decorator to log uncaught errors
  */
 (function() {
@@ -79,10 +72,6 @@
     .module('frontend.core.logging')
     .config(ExceptionHandlerDecorator);
 
-  /**
-   * Dependency injection
-   * @type string[]
-   */
   ExceptionHandlerDecorator.$inject = ['$provide'];
 
   function ExceptionHandlerDecorator($provide) {
@@ -93,8 +82,8 @@
 
     /**
      * Exception handler decorator to send to $log service uncaught exception
-     * @param {Object} $delegate - $exceptionHandler service to decorate
-     * @param {Object} $log - $log service
+     * @param {service} $delegate - $exceptionHandler service to decorate
+     * @param {service} $log      - AngularJS logging service
      * @returns {function} function to log exception
      */
     function ExceptionHandler($delegate, $log) {
@@ -109,6 +98,7 @@
  * @ngdoc config
  * @name HttpLoggingConfig
  * @memberof frontend.core.logging
+ * @param {service} $httpProvider - AngularJS $http service provider
  * @description Http error interceptor configuration
  */
 (function() {
@@ -118,10 +108,6 @@
     .module('frontend.core.logging')
     .config(HttpLoggingConfig);
 
-  /**
-   * Dependency injection
-   * @type string[]
-   */
   HttpLoggingConfig.$inject = ['$httpProvider'];
 
   /**
