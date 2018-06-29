@@ -1,7 +1,7 @@
-Nean stack
-==========
+PronoFootSept
+=============
 
-Nean stack application based on NeDB Express Angularjs Nodejs.
+Foot pronostics app base on Nean-stack.
 
 Backend
 -------
@@ -38,7 +38,7 @@ Features
 Install
 -------
 
-    $ npm install https://github.com/angusyg/nean-stack
+    $ npm install https://github.com/angusyg/pfs
 
 Quick Start
 -----------

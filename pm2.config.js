@@ -1,6 +1,6 @@
 module.exports = {
   apps: [{
-    name: 'nean-stack',
+    name: 'pfs',
     script: './backend/bin/www',
     instances: 1,
     max_memory_restart: '200M',

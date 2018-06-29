@@ -1,7 +1,7 @@
 version: "3"
 services:
-  nean-stack-app:
-    image: nean-stack
+  pfs-app:
+    image: pfs
     build:
       context: .
       args:
@@ -10,9 +10,9 @@ services:
     ports:
       - "${EXTERNAL_PORT}:3000"
     volumes:
-      - nean-stack-data:${DB_FOLDER}
-      - nean-stack-log:${LOG_FOLDER}
-      - nean-stack-web:${WEB_FOLDER}
+      - pfs-data:${DB_FOLDER}
+      - pfs-log:${LOG_FOLDER}
+      - pfs-web:${WEB_FOLDER}
     environment:
       - NODE_ENV=${NODE_ENV}
       - TOKEN_SECRET=${TOKEN_SECRET}

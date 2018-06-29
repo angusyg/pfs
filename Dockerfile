@@ -1,8 +1,8 @@
 FROM node:alpine
 
 # Build args
-ARG APP_NAME nean-stack
-ARG APP_REPOSITORY https://github.com/angusyg/nean-stack
+ARG APP_NAME pfs
+ARG APP_REPOSITORY https://github.com/angusyg/pfs
 
 RUN apk add --no-cache \
   git \

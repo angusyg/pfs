@@ -1,7 +1,7 @@
 {
-  "name": "nean-stack",
+  "name": "pfs",
   "version": "1.0.0",
-  "description": "NeDB Express Angularjs Nodejs application stack",
+  "description": "Foot pronostics app base on Nean-stack",
   "main": "./backend/bin/www",
   "scripts": {
     "test": "cross-env NODE_ENV=test nyc --reporter=html --reporter=text mocha backend/**/*.spec.js test/tests.js --timeout 10000 --exit",
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/angusyg/nean-stack.git"
+    "url": "git+ssh://git@github.com/angusyg/pfs.git"
   },
   "keywords": [
     "nodejs",
@@ -27,7 +27,7 @@
   "author": "angusyg",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/angusyg/nean-stack/issues"
+    "url": "https://github.com/angusyg/pfs/issues"
   },
   "nyc": {
     "exclude": [
@@ -36,7 +36,7 @@
     ],
     "temp-directory": "./coverage/.nyc_output"
   },
-  "homepage": "https://github.com/angusyg/nean-stack#readme",
+  "homepage": "https://github.com/angusyg/pfs#readme",
   "dependencies": {
     "@uirouter/angularjs": "^1.0.18",
     "angular": "^1.7.2",
@@ -106,5 +106,8 @@
     "run-sequence": "^2.2.1",
     "sinon": "^6.0.0",
     "supertest": "^3.1.0"
+  },
+  "directories": {
+    "test": "test"
   }
 }
